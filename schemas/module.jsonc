@@ -1,0 +1,95 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://github.com/ralish/PSPuTTYCfg/module",
+    "title": "PSPuTTYCfg module",
+    "type": "object",
+    "required": [
+        "settings"
+    ],
+    "definitions": {
+        "setting": {
+            "type": "object",
+            "required": [
+                "json",
+                "reg"
+            ],
+            "properties": {
+                "enum": {
+                    "type": "object"
+                },
+                "json": {
+                    "$ref": "#/definitions/jsonSetting"
+                },
+                "reg": {
+                    "$ref": "#/definitions/regSetting"
+                }
+            },
+            "additionalProperties": false
+        },
+        "jsonSetting": {
+            "type": "object",
+            "required": [
+                "name",
+                "path",
+                "type"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "path": {
+                    "type": "string",
+                    "format": "json-pointer"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "array",
+                        "boolean",
+                        "integer",
+                        "string"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "regSetting": {
+            "type": "object",
+            "required": [
+                "name",
+                "type",
+                "default"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "DWord",
+                        "String"
+                    ]
+                },
+                "default": {
+                    "type": [
+                        "integer",
+                        "string"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "settings": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/setting"
+            }
+        }
+    },
+    "additionalProperties": false
+}

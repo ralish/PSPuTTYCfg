@@ -1,0 +1,2674 @@
+{
+    "settings": [
+        // Connection
+        {
+            "json": {
+                "name": "keepaliveInterval",
+                "path": "/connection",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "PingIntervalSecs",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "tcpDisableNagle",
+                "path": "/connection/transport",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "TCPNoDelay",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "tcpKeepalives",
+                "path": "/connection/transport",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "TCPKeepalives",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "ipv4": 1,
+                "ipv6": 2
+            },
+            "json": {
+                "name": "ipVersion",
+                "path": "/connection/transport",
+                "type": "string"
+            },
+            "reg": {
+                "name": "AddressFamily",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "logicalHost",
+                "path": "/connection",
+                "type": "string"
+            },
+            "reg": {
+                "name": "LogHost",
+                "type": "String",
+                "default": ""
+            }
+        },
+        // Connection -> Data
+        {
+            "json": {
+                "name": "username",
+                "path": "/connection/data",
+                "type": "string"
+            },
+            "reg": {
+                "name": "UserName",
+                "type": "String",
+                "default": ""
+            }
+        },
+        {
+            "enum": {
+                "prompt": 0,
+                "system": 1
+            },
+            "json": {
+                "name": "usernameFallback",
+                "path": "/connection/data",
+                "type": "string"
+            },
+            "reg": {
+                "name": "UserNameFromEnvironment",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "termType",
+                "path": "/connection/data",
+                "type": "string"
+            },
+            "reg": {
+                "name": "TerminalType",
+                "type": "String",
+                "default": "xterm"
+            }
+        },
+        {
+            "json": {
+                "name": "termSpeed",
+                "path": "/connection/data",
+                "type": "string"
+            },
+            "reg": {
+                "name": "TerminalSpeed",
+                "type": "String",
+                "default": "38400,38400"
+            }
+        },
+        {
+            "json": {
+                "name": "envVars",
+                "path": "/connection/data",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Environment",
+                "type": "String",
+                "default": ""
+            }
+        },
+        // Connection -> Proxy
+        {
+            "enum": {
+                "none": 0,
+                "socks4": 1,
+                "socks5": 2,
+                "http": 3,
+                "telnet": 4,
+                "local": 5
+            },
+            "json": {
+                "name": "type",
+                "path": "/connection/proxy",
+                "type": "string"
+            },
+            "reg": {
+                "name": "ProxyMethod",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "host",
+                "path": "/connection/proxy",
+                "type": "string"
+            },
+            "reg": {
+                "name": "ProxyHost",
+                "type": "String",
+                "default": "proxy"
+            }
+        },
+        {
+            "json": {
+                "name": "port",
+                "path": "/connection/proxy",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "ProxyPort",
+                "type": "DWord",
+                "default": 80
+            }
+        },
+        {
+            "json": {
+                "name": "exclusions",
+                "path": "/connection/proxy",
+                "type": "array"
+            },
+            "reg": {
+                "name": "ProxyExcludeList",
+                "type": "String",
+                "default": ""
+            }
+        },
+        {
+            "json": {
+                "name": "proxyLocalhost",
+                "path": "/connection/proxy",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "ProxyLocalhost",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "no": 0,
+                "auto": 1,
+                "yes": 2
+            },
+            "json": {
+                "name": "proxyDns",
+                "path": "/connection/proxy",
+                "type": "string"
+            },
+            "reg": {
+                "name": "ProxyDNS",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "username",
+                "path": "/connection/proxy",
+                "type": "string"
+            },
+            "reg": {
+                "name": "ProxyUsername",
+                "type": "String",
+                "default": ""
+            }
+        },
+        {
+            "json": {
+                "name": "password",
+                "path": "/connection/proxy",
+                "type": "string"
+            },
+            "reg": {
+                "name": "ProxyPassword",
+                "type": "String",
+                "default": ""
+            }
+        },
+        {
+            "json": {
+                "name": "command",
+                "path": "/connection/proxy",
+                "type": "string"
+            },
+            "reg": {
+                "name": "ProxyTelnetCommand",
+                "type": "String",
+                "default": "connect %host %port\\n"
+            }
+        },
+        {
+            "enum": {
+                "yes": 0,
+                "no": 1,
+                "initial": 2
+            },
+            "json": {
+                "name": "termLog",
+                "path": "/connection/proxy",
+                "type": "string"
+            },
+            "reg": {
+                "name": "ProxyLogToTerm",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        // Connection -> Rlogin
+        {
+            "json": {
+                "name": "localUsername",
+                "path": "/connection/rlogin",
+                "type": "string"
+            },
+            "reg": {
+                "name": "LocalUserName",
+                "type": "String",
+                "default": ""
+            }
+        },
+        // Connection -> Serial
+        {
+            "json": {
+                "name": "line",
+                "path": "/connection/serial",
+                "type": "string"
+            },
+            "reg": {
+                "name": "SerialLine",
+                "type": "String",
+                "default": "COM1"
+            }
+        },
+        {
+            "json": {
+                "name": "speed",
+                "path": "/connection/serial",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "SerialSpeed",
+                "type": "DWord",
+                "default": 9600
+            }
+        },
+        {
+            "json": {
+                "name": "dataBits",
+                "path": "/connection/serial",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "SerialDataBits",
+                "type": "DWord",
+                "default": 8
+            }
+        },
+        {
+            "json": {
+                "name": "stopHalfBits",
+                "path": "/connection/serial",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "SerialStopHalfBits",
+                "type": "DWord",
+                "default": 2
+            }
+        },
+        {
+            "enum": {
+                "none": 0,
+                "odd": 1,
+                "even": 2,
+                "mark": 3,
+                "space": 4
+            },
+            "json": {
+                "name": "parity",
+                "path": "/connection/serial",
+                "type": "string"
+            },
+            "reg": {
+                "name": "SerialParity",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "none": 0,
+                "xonXoff": 1,
+                "rtsCtr": 2,
+                "dsrDtr": 3
+            },
+            "json": {
+                "name": "flowControl",
+                "path": "/connection/serial",
+                "type": "string"
+            },
+            "reg": {
+                "name": "SerialFlowControl",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        // Connection -> SSH
+        {
+            "json": {
+                "name": "remoteCommand",
+                "path": "/connection/ssh",
+                "type": "string"
+            },
+            "reg": {
+                "name": "RemoteCommand",
+                "type": "String",
+                "default": ""
+            }
+        },
+        {
+            "json": {
+                "name": "noShell",
+                "path": "/connection/ssh",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "SshNoShell",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "compression",
+                "path": "/connection/ssh",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "Compression",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "1": 0,
+                "2": 3
+            },
+            "json": {
+                "name": "version",
+                "path": "/connection/ssh",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "SshProt",
+                "type": "DWord",
+                "default": 3
+            }
+        },
+        {
+            "json": {
+                "name": "connectionSharing",
+                "path": "/connection/ssh",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "ConnectionSharing",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "connectingSharingUpstream",
+                "path": "/connection/ssh",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "ConnectionSharingUpstream",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "connectionSharingDownstream",
+                "path": "/connection/ssh",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "ConnectionSharingDownstream",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        // Connection -> SSH -> Auth
+        {
+            "json": {
+                "name": "showBanner",
+                "path": "/connection/ssh/auth",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "SshBanner",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "bypassAuth",
+                "path": "/connection/ssh/auth",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "SshNoAuth",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "authAgent",
+                "path": "/connection/ssh/auth",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "TryAgent",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "authTisOrCryptoCard",
+                "path": "/connection/ssh/auth",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "AuthTIS",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "authKeyboardInteractive",
+                "path": "/connection/ssh/auth",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "AuthKI",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "agentForwarding",
+                "path": "/connection/ssh/auth",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "AgentFwd",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "usernameChange",
+                "path": "/connection/ssh/auth",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "ChangeUsername",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "authKeyFile",
+                "path": "/connection/ssh/auth",
+                "type": "string"
+            },
+            "reg": {
+                "name": "PublicKeyFile",
+                "type": "String",
+                "default": ""
+            }
+        },
+        // Connection -> SSH -> Auth -> GSSAPI
+        {
+            "json": {
+                "name": "authGssapi",
+                "path": "/connection/ssh/auth",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "AuthGSSAPI",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "gssapiKex",
+                "path": "/connection/ssh/crypto",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "AuthGSSAPIKEX",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "gssapiDelegation",
+                "path": "/connection/ssh/auth",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "GssapiFwd",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "gssapiLibs",
+                "path": "/connection/ssh/auth",
+                "type": "array"
+            },
+            "reg": {
+                "name": "GSSLibs",
+                "type": "String",
+                "default": "gssapi32,sspi,custom"
+            }
+        },
+        {
+            "json": {
+                "name": "gssapiCustomLib",
+                "path": "/connection/ssh/auth",
+                "type": "string"
+            },
+            "reg": {
+                "name": "GSSCustom",
+                "type": "String",
+                "default": ""
+            }
+        },
+        // Connection -> SSH -> Bugs
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "messageIgnoreHangV2",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugIgnore2",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "rekeyBrokenV2",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugRekey2",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "messageWinAdjHangV2",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugWinadj",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "closedChannelReplyV2",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugChanReq",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "maxPacketSizeIgnoredV2",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugMaxPkt2",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        // Connection -> SSH -> Cipher
+        {
+            "json": {
+                "name": "ciphers",
+                "path": "/connection/ssh/crypto",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Cipher",
+                "type": "String",
+                "default": "aes,chacha20,3des,WARN,des,blowfish,arcfour"
+            }
+        },
+        {
+            "json": {
+                "name": "allowSingleDes",
+                "path": "/connection/ssh/crypto",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "SSH2DES",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        // Connection -> SSH -> Host keys
+        {
+            "json": {
+                "name": "hostKeys",
+                "path": "/connection/ssh/crypto",
+                "type": "array"
+            },
+            "reg": {
+                "name": "HostKey",
+                "type": "String",
+                "default": "ed25519,ecdsa,rsa,dsa,WARN"
+            }
+        },
+        {
+            "json": {
+                "name": "preferKnownHostKeys",
+                "path": "/connection/ssh/crypto",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "PreferKnownHostKeys",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "allowedHostKeys",
+                "path": "/connection/ssh/crypto",
+                "type": "array"
+            },
+            "reg": {
+                "name": "SSHManualHostKeys",
+                "type": "String",
+                "default": ""
+            }
+        },
+        // Connection -> SSH -> Kex
+        {
+            "json": {
+                "name": "kex",
+                "path": "/connection/ssh/crypto",
+                "type": "array"
+            },
+            "reg": {
+                "name": "KEX",
+                "type": "String",
+                "default": "ecdh,dh-gex-sha1,dh-group14-sha1,rsa,WARN,dh-group1-sha1"
+            }
+        },
+        {
+            "json": {
+                "name": "rekeyMaxInterval",
+                "path": "/connection/ssh/crypto",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "RekeyTime",
+                "type": "DWord",
+                "default": 60
+            }
+        },
+        {
+            "json": {
+                "name": "rekeyGssapiCheckInterval",
+                "path": "/connection/ssh/crypto",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "GssapiRekey",
+                "type": "DWord",
+                "default": 2
+            }
+        },
+        {
+            "json": {
+                "name": "rekeyMaxBytes",
+                "path": "/connection/ssh/crypto",
+                "type": "string"
+            },
+            "reg": {
+                "name": "RekeyBytes",
+                "type": "String",
+                "default": "1G"
+            }
+        },
+        // Connection -> SSH -> More bugs
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "rsaSignaturePaddingV2",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugRSAPad2",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "oldDhGexOnlyV2",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugOldGex2",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "invalidHmacKeysV2",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugHMAC2",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "pkAuthSessionIdMisuseV2",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugPKSessID2",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "invalidEncryptionKeysV2",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugDeriveKey2",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "messageIgnoreHangV1",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugIgnore1",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "refusesPasswordCamouflageV1",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugPlainPW1",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "rsaAuthHangV1",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugRSA1",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        // Connection -> SSH -> TTY
+        {
+            "json": {
+                "name": "noPty",
+                "path": "/connection/ssh",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "NoPTY",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        // Connection -> SSH -> Tunnels
+        {
+            "json": {
+                "name": "localPortsAcceptAll",
+                "path": "/connection/ssh/tunnels",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "LocalPortAcceptAll",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "remotePortsAcceptAll",
+                "path": "/connection/ssh/tunnels",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "RemotePortAcceptAll",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "forwardedPorts",
+                "path": "/connection/ssh/tunnels",
+                "type": "array"
+            },
+            "reg": {
+                "name": "PortForwardings",
+                "type": "String",
+                "default": ""
+            }
+        },
+        // Connection -> SSH -> X11
+        {
+            "json": {
+                "name": "x11Forwarding",
+                "path": "/connection/ssh/x11",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "X11Forward",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "x11Display",
+                "path": "/connection/ssh/x11",
+                "type": "string"
+            },
+            "reg": {
+                "name": "X11Display",
+                "type": "String",
+                "default": ""
+            }
+        },
+        {
+            "enum": {
+                "mit-magic-cookie-1": 1,
+                "xdm-authorization-1": 2
+            },
+            "json": {
+                "name": "x11AuthType",
+                "path": "/connection/ssh/x11",
+                "type": "string"
+            },
+            "reg": {
+                "name": "X11AuthType",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "x11AuthFile",
+                "path": "/connection/ssh/x11",
+                "type": "string"
+            },
+            "reg": {
+                "name": "X11AuthFile",
+                "type": "String",
+                "default": ""
+            }
+        },
+        // Connection -> Telnet
+        {
+            "enum": {
+                "bsd": 0,
+                "rfc1408": 1
+            },
+            "json": {
+                "name": "oldEnvironHandling",
+                "path": "/connection/telnet",
+                "type": "string"
+            },
+            "reg": {
+                "name": "RFCEnviron",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "active": 0,
+                "passive": 1
+            },
+            "json": {
+                "name": "negotiateMode",
+                "path": "/connection/telnet",
+                "type": "string"
+            },
+            "reg": {
+                "name": "PassiveTelnet",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "keyboardSpecialCommands",
+                "path": "/connection/telnet",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "TelnetKey",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "returnKeySendsNewLine",
+                "path": "/connection/telnet",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "TelnetRet",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        // Session
+        {
+            "json": {
+                "name": "protocol",
+                "path": "/connection",
+                "type": "string"
+            },
+            "reg": {
+                "name": "Protocol",
+                "type": "String",
+                "default": ""
+            }
+        },
+        {
+            "json": {
+                "name": "host",
+                "path": "/connection",
+                "type": "string"
+            },
+            "reg": {
+                "name": "HostName",
+                "type": "String",
+                "default": ""
+            }
+        },
+        {
+            "json": {
+                "name": "port",
+                "path": "/connection",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "PortNumber",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "never": 0,
+                "cleanExit": 1,
+                "always": 2
+            },
+            "json": {
+                "name": "closeOnExit",
+                "path": "/window/behaviour",
+                "type": "string"
+            },
+            "reg": {
+                "name": "CloseOnExit",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        // Session -> Logging
+        {
+            "enum": {
+                "none": 0,
+                "printable": 1,
+                "session": 2,
+                "packets": 3,
+                "raw": 4
+            },
+            "json": {
+                "name": "type",
+                "path": "/logging",
+                "type": "string"
+            },
+            "reg": {
+                "name": "LogType",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "path",
+                "path": "/logging",
+                "type": "string"
+            },
+            "reg": {
+                "name": "LogFileName",
+                "type": "String",
+                "default": "putty.log"
+            }
+        },
+        {
+            "enum": {
+                "ask": -1,
+                "append": 0,
+                "overwrite": 1
+            },
+            "json": {
+                "name": "whenExists",
+                "path": "/logging",
+                "type": "string"
+            },
+            "reg": {
+                "name": "LogFileClash",
+                "type": "DWord",
+                "default": -1
+            }
+        },
+        {
+            "json": {
+                "name": "flushFrequently",
+                "path": "/logging",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "LogFlush",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "includeHeader",
+                "path": "/logging",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "LogHeader",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "omitPasswordFields",
+                "path": "/logging",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "SSHLogOmitPasswords",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "omitSessionData",
+                "path": "/logging",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "SSHLogOmitData",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        // Terminal
+        {
+            "json": {
+                "name": "autoWrapMode",
+                "path": "/terminal",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "AutoWrapMode",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "decOriginMode",
+                "path": "/terminal",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "DECOriginMode",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "lfImpliesCR",
+                "path": "/terminal",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "LFImpliesCR",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "crImpliesLF",
+                "path": "/terminal",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "CRImpliesLF",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "backgroundColourErase",
+                "path": "/terminal",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "BCE",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "textBlink",
+                "path": "/terminal",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "BlinkText",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "answerback",
+                "path": "/terminal",
+                "type": "string"
+            },
+            "reg": {
+                "name": "Answerback",
+                "type": "String",
+                "default": "PuTTY"
+            }
+        },
+        {
+            "enum": {
+                "forceOn": 0,
+                "forceOff": 1,
+                "auto": 2
+            },
+            "json": {
+                "name": "localEcho",
+                "path": "/terminal",
+                "type": "string"
+            },
+            "reg": {
+                "name": "LocalEcho",
+                "type": "DWord",
+                "default": 2
+            }
+        },
+        {
+            "enum": {
+                "forceOn": 0,
+                "forceOff": 1,
+                "auto": 2
+            },
+            "json": {
+                "name": "localEdit",
+                "path": "/terminal",
+                "type": "string"
+            },
+            "reg": {
+                "name": "LocalEdit",
+                "type": "DWord",
+                "default": 2
+            }
+        },
+        {
+            "json": {
+                "name": "printer",
+                "path": "/terminal",
+                "type": "string"
+            },
+            "reg": {
+                "name": "Printer",
+                "type": "String",
+                "default": ""
+            }
+        },
+        // Terminal -> Bell
+        {
+            "enum": {
+                "none": 0,
+                "alert": 1,
+                "flash": 2,
+                "beep": 3,
+                "custom": 4
+            },
+            "json": {
+                "name": "action",
+                "path": "/terminal/bell",
+                "type": "string"
+            },
+            "reg": {
+                "name": "Beep",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "customAction",
+                "path": "/terminal/bell",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BellWaveFile",
+                "type": "String",
+                "default": ""
+            }
+        },
+        {
+            "enum": {
+                "disabled": 0,
+                "flashing": 1,
+                "steady": 2
+            },
+            "json": {
+                "name": "indicator",
+                "path": "/terminal/bell",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BeepInd",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "overload",
+                "path": "/terminal/bell",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "BellOverload",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "overloadNumber",
+                "path": "/terminal/bell",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "BellOverloadN",
+                "type": "DWord",
+                "default": 5
+            }
+        },
+        {
+            "json": {
+                "name": "overloadDuration",
+                "path": "/terminal/bell",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "BellOverloadT",
+                "type": "DWord",
+                "default": 2000
+            }
+        },
+        {
+            "json": {
+                "name": "overloadSuppression",
+                "path": "/terminal/bell",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "BellOverloadS",
+                "type": "DWord",
+                "default": 5000
+            }
+        },
+        // Terminal -> Features
+        {
+            "json": {
+                "name": "noApplicationCursorKeysMode",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "NoApplicationCursors",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "noApplicationKeypadMode",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "NoApplicationKeys",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "noXtermMouseReporting",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "NoMouseReporting",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "noRemoteTermResize",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "NoRemoteResize",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "noAlternateScreenSwitching",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "NoAltScreen",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "noRemoteWindowTitle",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "NoRemoteWinTitle",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "none": 0,
+                "empty": 1,
+                "title": 2
+            },
+            "json": {
+                "name": "remoteTitleQueryResponse",
+                "path": "/terminal/features",
+                "type": "string"
+            },
+            "reg": {
+                "name": "RemoteQTitleAction",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "noRemoteScrollbackClear",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "NoRemoteClearScroll",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "noRemoteDestructiveBackspace",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "NoDBackspace",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "noRemoteCharsetConfig",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "NoRemoteCharset",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "noArabicTextShaping",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "DisableArabicShaping",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "noBidirectionalTextDisplay",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "DisableBidi",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        // Terminal -> Keyboard
+        {
+            "enum": {
+                "ctrl-h": 0,
+                "ctrl-?": 1
+            },
+            "json": {
+                "name": "backspaceKeyMode",
+                "path": "/terminal/keyboard",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BackspaceIsDelete",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "enum": {
+                "standard": 0,
+                "rxvt": 1
+            },
+            "json": {
+                "name": "homeAndEndKeysMode",
+                "path": "/terminal/keyboard",
+                "type": "string"
+            },
+            "reg": {
+                "name": "RXVTHomeEnd",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "esc[n~": 0,
+                "linux": 1,
+                "xtermr6": 2,
+                "vt400": 3,
+                "vt100+": 4,
+                "sco": 5
+            },
+            "json": {
+                "name": "functionKeysAndKeypadMode",
+                "path": "/terminal/keyboard",
+                "type": "string"
+            },
+            "reg": {
+                "name": "LinuxFunctionKeys",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "normal": 0,
+                "application": 1
+            },
+            "json": {
+                "name": "cursorKeysMode",
+                "path": "/terminal/keyboard",
+                "type": "string"
+            },
+            "reg": {
+                "name": "ApplicationCursorKeys",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "normal": 0,
+                "application": 1,
+                "netHack": 2
+            },
+            "json": {
+                "name": "numericKeypadMode",
+                "path": "/terminal/keyboard",
+                "type": "string"
+            },
+            "reg": {
+                "name": "ApplicationKeypad",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "altGrAsCompose",
+                "path": "/terminal/keyboard",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "ComposeKey",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "ctrlAltDistinct",
+                "path": "/terminal/keyboard",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "CtrlAltKeys",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        // Window
+        {
+            "json": {
+                "name": "termWidth",
+                "path": "/window",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "TermWidth",
+                "type": "DWord",
+                "default": 80
+            }
+        },
+        {
+            "json": {
+                "name": "termHeight",
+                "path": "/window",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "TermHeight",
+                "type": "DWord",
+                "default": 24
+            }
+        },
+        {
+            "enum": {
+                "rowsAndColumns": 0,
+                "forbid": 1,
+                "fontSize": 2,
+                "fontSizeWhenMaximised": 3
+            },
+            "json": {
+                "name": "termResize",
+                "path": "/window",
+                "type": "string"
+            },
+            "reg": {
+                "name": "LockSize",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "maxLines",
+                "path": "/window/scrollback",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "ScrollbackLines",
+                "type": "DWord",
+                "default": 2000
+            }
+        },
+        {
+            "json": {
+                "name": "displayScrollbar",
+                "path": "/window/scrollback",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "ScrollBar",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "displayScrollbarInFullScreen",
+                "path": "/window/scrollback",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "ScrollBarFullScreen",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "resetOnKeypress",
+                "path": "/window/scrollback",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "ScrollOnKey",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "resetOnDisplayActivity",
+                "path": "/window/scrollback",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "ScrollOnDisp",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "erasedTextIntoScrollback",
+                "path": "/window/scrollback",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "EraseToScrollback",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        // Window -> Appearance
+        {
+            "enum": {
+                "block": 0,
+                "underline": 1,
+                "verticalLine": 2
+            },
+            "json": {
+                "name": "cursorType",
+                "path": "/window/appearance",
+                "type": "string"
+            },
+            "reg": {
+                "name": "CurType",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "cursorBlink",
+                "path": "/window/appearance",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "BlinkCur",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "fontName",
+                "path": "/window/appearance",
+                "type": "string"
+            },
+            "reg": {
+                "name": "Font",
+                "type": "String",
+                "default": "Courier New"
+            }
+        },
+        {
+            "json": {
+                "name": "fontSize",
+                "path": "/window/appearance",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "FontHeight",
+                "type": "DWord",
+                "default": 10
+            }
+        },
+        {
+            "enum": {
+                "english": 0,
+                "default": 1,
+                "symbols": 2,
+                "macintosh": 77,
+                "japanese": 128,
+                "korean-hangul": 129,
+                "korean-johab": 130,
+                "chinese-simplified": 134,
+                "chinese-traditional": 136,
+                "greek": 161,
+                "turkish": 162,
+                "vietnamese": 163,
+                "hebrew": 177,
+                "arabic": 178,
+                "baltic": 186,
+                "russian": 204,
+                "thai": 222,
+                "eastern-european": 238,
+                "oem": 255
+            },
+            "json": {
+                "name": "fontCharset",
+                "path": "/window/appearance",
+                "type": "string"
+            },
+            "reg": {
+                "name": "FontCharSet",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "fontIsBold",
+                "path": "/window/appearance",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "FontIsBold",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "default": 0,
+                "antialiased": 1,
+                "nonAntialiased": 2,
+                "clearType": 3
+            },
+            "json": {
+                "name": "fontQuality",
+                "path": "/window/appearance",
+                "type": "string"
+            },
+            "reg": {
+                "name": "FontQuality",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "hideMouseWhenTyping",
+                "path": "/window/behaviour",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "HideMousePtr",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "windowBorderGapSize",
+                "path": "/window/appearance",
+                "type": "integer"
+            },
+            "reg": {
+                "name": "WindowBorder",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "windowBorderSunkenEdge",
+                "path": "/window/appearance",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "SunkenEdge",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        // Window -> Behaviour
+        {
+            "json": {
+                "name": "windowTitle",
+                "path": "/window/behaviour",
+                "type": "string"
+            },
+            "reg": {
+                "name": "WinTitle",
+                "type": "String",
+                "default": ""
+            }
+        },
+        {
+            "json": {
+                "name": "ignoreIconTitle",
+                "path": "/window/behaviour",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "WinNameAlways",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "warnOnClose",
+                "path": "/window/behaviour",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "WarnOnClose",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "closeOnAltF4",
+                "path": "/window/behaviour",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "AltF4",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "systemMenuOnAltSpace",
+                "path": "/window/behaviour",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "AltSpace",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "systemMenuOnAlt",
+                "path": "/window/behaviour",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "AltOnly",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "alwaysOnTop",
+                "path": "/window/behaviour",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "AlwaysOnTop",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "fullScreenOnAltEnter",
+                "path": "/window/behaviour",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "FullScreenOnAltEnter",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        // Window -> Colours
+        {
+            "json": {
+                "name": "ansi",
+                "path": "/window/colours",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "ANSIColour",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "xterm",
+                "path": "/window/colours",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "Xterm256Colour",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "trueColour",
+                "path": "/window/colours",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "TrueColour",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "enum": {
+                "font": 0,
+                "colour": 1,
+                "both": 2
+            },
+            "json": {
+                "name": "boldTextHandling",
+                "path": "/window/appearance",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BoldAsColour",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "json": {
+                "name": "logicalPalettes",
+                "path": "/window/colours",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "TryPalette",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "inheritSystem",
+                "path": "/window/colours",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "UseSystemColours",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "foreground",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour0",
+                "type": "String",
+                "default": "187,187,187"
+            }
+        },
+        {
+            "json": {
+                "name": "foregroundBold",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour1",
+                "type": "String",
+                "default": "255,255,255"
+            }
+        },
+        {
+            "json": {
+                "name": "background",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour2",
+                "type": "String",
+                "default": "0,0,0"
+            }
+        },
+        {
+            "json": {
+                "name": "backgroundBold",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour3",
+                "type": "String",
+                "default": "85,85,85"
+            }
+        },
+        {
+            "json": {
+                "name": "cursorText",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour4",
+                "type": "String",
+                "default": "0,0,0"
+            }
+        },
+        {
+            "json": {
+                "name": "cursor",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour5",
+                "type": "String",
+                "default": "0,255,0"
+            }
+        },
+        {
+            "json": {
+                "name": "black",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour6",
+                "type": "String",
+                "default": "0,0,0"
+            }
+        },
+        {
+            "json": {
+                "name": "blackBold",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour7",
+                "type": "String",
+                "default": "85,85,85"
+            }
+        },
+        {
+            "json": {
+                "name": "red",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour8",
+                "type": "String",
+                "default": "187,0,0"
+            }
+        },
+        {
+            "json": {
+                "name": "redBold",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour9",
+                "type": "String",
+                "default": "255,85,85"
+            }
+        },
+        {
+            "json": {
+                "name": "green",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour10",
+                "type": "String",
+                "default": "0,187,0"
+            }
+        },
+        {
+            "json": {
+                "name": "greenBold",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour11",
+                "type": "String",
+                "default": "85,255,85"
+            }
+        },
+        {
+            "json": {
+                "name": "yellow",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour12",
+                "type": "String",
+                "default": "187,187,0"
+            }
+        },
+        {
+            "json": {
+                "name": "yellowBold",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour13",
+                "type": "String",
+                "default": "255,255,85"
+            }
+        },
+        {
+            "json": {
+                "name": "blue",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour14",
+                "type": "String",
+                "default": "0,0,187"
+            }
+        },
+        {
+            "json": {
+                "name": "blueBold",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour15",
+                "type": "String",
+                "default": "85,85,255"
+            }
+        },
+        {
+            "json": {
+                "name": "magenta",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour16",
+                "type": "String",
+                "default": "187,0,187"
+            }
+        },
+        {
+            "json": {
+                "name": "magentaBold",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour17",
+                "type": "String",
+                "default": "255,85,255"
+            }
+        },
+        {
+            "json": {
+                "name": "cyan",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour18",
+                "type": "String",
+                "default": "0,187,187"
+            }
+        },
+        {
+            "json": {
+                "name": "cyanBold",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour19",
+                "type": "String",
+                "default": "85,255,255"
+            }
+        },
+        {
+            "json": {
+                "name": "white",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour20",
+                "type": "String",
+                "default": "187,187,187"
+            }
+        },
+        {
+            "json": {
+                "name": "whiteBold",
+                "path": "/window/colours/customise",
+                "type": "array"
+            },
+            "reg": {
+                "name": "Colour21",
+                "type": "String",
+                "default": "255,255,255"
+            }
+        },
+        // Window -> Selection
+        {
+            "enum": {
+                "compromise": 0,
+                "xterm": 1,
+                "windows": 2
+            },
+            "json": {
+                "name": "mouseButtonsMode",
+                "path": "/window/clipboard",
+                "type": "string"
+            },
+            "reg": {
+                "name": "MouseIsXterm",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "mouseModeShiftOverride",
+                "path": "/window/clipboard",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "MouseOverride",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "enum": {
+                "normal": 0,
+                "rectangular": 1
+            },
+            "json": {
+                "name": "selectionMode",
+                "path": "/window/clipboard",
+                "type": "string"
+            },
+            "reg": {
+                "name": "RectSelect",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "mouseAutocopy",
+                "path": "/window/clipboard",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "MouseAutocopy",
+                "type": "DWord",
+                "default": 1
+            }
+        },
+        {
+            "enum": {
+                "none": "none",
+                "lastSelected": "implicit",
+                "systemClipboard": "explicit"
+            },
+            "json": {
+                "name": "actionMousePaste",
+                "path": "/window/clipboard",
+                "type": "string"
+            },
+            "reg": {
+                "name": "MousePaste",
+                "type": "String",
+                "default": "explicit"
+            }
+        },
+        {
+            "enum": {
+                "none": "none",
+                "lastSelected": "implicit",
+                "systemClipboard": "explicit"
+            },
+            "json": {
+                "name": "actionCtrlShiftIns",
+                "path": "/window/clipboard",
+                "type": "string"
+            },
+            "reg": {
+                "name": "CtrlShiftIns",
+                "type": "String",
+                "default": "explicit"
+            }
+        },
+        {
+            "enum": {
+                "none": "none",
+                "lastSelected": "implicit",
+                "systemClipboard": "explicit"
+            },
+            "json": {
+                "name": "actionCtrlShiftCV",
+                "path": "/window/clipboard",
+                "type": "string"
+            },
+            "reg": {
+                "name": "CtrlShiftCV",
+                "type": "String",
+                "default": "none"
+            }
+        },
+        {
+            "json": {
+                "name": "allowControlChars",
+                "path": "/window/clipboard",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "PasteControls",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        // Window -> Selection -> Copy
+        {
+            "json": {
+                "name": "copyAsRtf",
+                "path": "/window/clipboard",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "PasteRTF",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        // Window -> Translation
+        {
+            "json": {
+                "name": "remoteCharset",
+                "path": "/window/charset",
+                "type": "string"
+            },
+            "reg": {
+                "name": "LineCodePage",
+                "type": "String",
+                "default": ""
+            }
+        },
+        {
+            "json": {
+                "name": "ambiguousCjkAsWide",
+                "path": "/window/charset",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "CJKAmbigWide",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "capsLockForCyrillic",
+                "path": "/window/charset",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "CapsLockCyr",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "xwindows": 0,
+                "ansiAndOem": 1,
+                "oem": 2,
+                "emulate": 3,
+                "unicode": 4
+            },
+            "json": {
+                "name": "lineDrawingMode",
+                "path": "/window/charset",
+                "type": "string"
+            },
+            "reg": {
+                "name": "FontVTMode",
+                "type": "DWord",
+                "default": 4
+            }
+        },
+        {
+            "json": {
+                "name": "vt100CopyPasteAsAsciiChars",
+                "path": "/window/charset",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "RawCNP",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "vt100LineDrawingInUtf8Mode",
+                "path": "/window/charset",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "UTF8linedraw",
+                "type": "DWord",
+                "default": 0
+            }
+        }
+    ]
+}
