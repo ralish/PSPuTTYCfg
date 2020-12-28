@@ -1,0 +1,1892 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://github.com/ralish/PSPuTTYCfg",
+    "title": "PuTTY configuration",
+    "type": "object",
+    "definitions": {
+        "CategoryConnection": {
+            "type": "object",
+            "properties": {
+                "transport": {
+                    "$ref": "#/definitions/CategoryConnectionTransport"
+                },
+                "proxy": {
+                    "$ref": "#/definitions/CategoryConnectionProxy"
+                },
+                "data": {
+                    "$ref": "#/definitions/CategoryConnectionData"
+                },
+                "ssh": {
+                    "$ref": "#/definitions/CategoryConnectionSsh"
+                },
+                "rlogin": {
+                    "$ref": "#/definitions/CategoryConnectionRlogin"
+                },
+                "telnet": {
+                    "$ref": "#/definitions/CategoryConnectionTelnet"
+                },
+                "serial": {
+                    "$ref": "#/definitions/CategoryConnectionSerial"
+                },
+                "protocol": {
+                    "$comment": "Protocol",
+                    "title": "Connection type",
+                    "type": "string",
+                    "enum": [
+                        "raw",
+                        "telnet",
+                        "rlogin",
+                        "ssh",
+                        "ssh-connection", // Not in UI
+                        "serial",
+                        "supdup" // Not in UI
+                    ],
+                    "default": "ssh"
+                },
+                "host": {
+                    "$comment": "HostName",
+                    "title": "Host Name (or IP address)",
+                    "type": "string"
+                },
+                "port": {
+                    "$comment": "PortNumber",
+                    "$ref": "#/definitions/TypeIpPort",
+                    "title": "Port"
+                },
+                "logicalHost": {
+                    "$comment": "LogHost",
+                    "title": "Logical name of remote host (e.g. for SSH key lookup)",
+                    "type": "string"
+                },
+                "keepaliveInterval": {
+                    "$comment": "PingIntervalSecs",
+                    "title": "Seconds between keepalives (0 to turn off)",
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 0
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "protocol": {
+                                "const": "rlogin"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "port": {
+                                "default": 513
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "protocol": {
+                                "const": "ssh"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "port": {
+                                "default": 22
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "protocol": {
+                                "const": "supdup"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "port": {
+                                "default": 95
+                            }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "protocol": {
+                                "const": "telnet"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "port": {
+                                "default": 23
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "CategoryConnectionData": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "$comment": "UserName",
+                    "title": "Auto-login username",
+                    "type": "string"
+                },
+                "usernameFallback": {
+                    "$comment": "UserNameFromEnvironment",
+                    "title": "When username is not specified",
+                    "type": "string",
+                    "enum": [
+                        "prompt",
+                        "system"
+                    ],
+                    "default": "prompt"
+                },
+                "envVars": {
+                    "$comment": "Environment",
+                    "title": "Environment variables",
+                    "type": "array",
+                    "items": {
+                        "title": "Environment variable",
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                },
+                "termType": {
+                    "$comment": "TerminalType",
+                    "title": "Terminal-type string",
+                    "type": "string",
+                    "default": "xterm"
+                },
+                "termSpeed": {
+                    "$comment": "TerminalSpeed",
+                    "title": "Terminal speeds",
+                    "type": "string",
+                    "default": "38400,38400"
+                }
+            }
+        },
+        "CategoryConnectionProxy": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$comment": "ProxyMethod",
+                    "title": "Proxy type",
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "local",
+                        "http",
+                        "socks4",
+                        "socks5",
+                        "telnet"
+                    ],
+                    "default": "None"
+                },
+                "host": {
+                    "$comment": "ProxyHost",
+                    "title": "Proxy hostname",
+                    "type": "string",
+                    "default": "proxy"
+                },
+                "port": {
+                    "$comment": "ProxyPort",
+                    "$ref": "#/definitions/TypeIpPort",
+                    "title": "Port",
+                    "default": 80
+                },
+                "username": {
+                    "$comment": "ProxyUsername",
+                    "title": "Username",
+                    "type": "string"
+                },
+                "password": {
+                    "$comment": "ProxyPassword",
+                    "title": "Password",
+                    "type": "string"
+                },
+                "command": {
+                    "$comment": "ProxyTelnetCommand",
+                    "title": "Telnet command, or local proxy command",
+                    "type": "string",
+                    "default": "connect %host %port\\n"
+                },
+                "exclusions": {
+                    "$comment": "ProxyExcludeList",
+                    "title": "Exclude Hosts/IPs",
+                    "type": "array",
+                    "items": {
+                        "title": "Excluded Host/IP",
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                },
+                "proxyLocalhost": {
+                    "$comment": "ProxyLocalhost",
+                    "title": "Consider proxying local host connections",
+                    "type": "boolean",
+                    "default": false
+                },
+                "proxyDns": {
+                    "$comment": "ProxyDNS",
+                    "title": "Do DNS name lookup at proxy end",
+                    "type": "string",
+                    "enum": [
+                        "no",
+                        "auto",
+                        "yes"
+                    ],
+                    "default": "auto"
+                },
+                "termLog": {
+                    "$comment": "ProxyLogToTerm",
+                    "title": "Print proxy diagnostics in the terminal window",
+                    "type": "string",
+                    "enum": [
+                        "no",
+                        "yes",
+                        "initial"
+                    ],
+                    "default": "no"
+                }
+            }
+        },
+        "CategoryConnectionRlogin": {
+            "type": "object",
+            "properties": {
+                "localUsername": {
+                    "$comment": "LocalUserName",
+                    "title": "Local username",
+                    "type": "string"
+                }
+            }
+        },
+        "CategoryConnectionSerial": {
+            "type": "object",
+            "properties": {
+                "line": {
+                    "$comment": "SerialLine",
+                    "title": "Serial line to connect to",
+                    "type": "string",
+                    "default": "COM1" // Windows default
+                },
+                "speed": {
+                    "$comment": "SerialSpeed",
+                    "title": "Speed (baud)",
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 9600
+                },
+                "dataBits": {
+                    "$comment": "SerialDataBits",
+                    "title": "Data bits",
+                    "type": "integer",
+                    "minimum": 6,
+                    "maximum": 9,
+                    "default": 8
+                },
+                "stopHalfBits": {
+                    "$comment": "SerialStopHalfBits",
+                    "title": "Stop bits",
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 4,
+                    "default": 2
+                },
+                "parity": {
+                    "$comment": "SerialParity",
+                    "title": "Parity",
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "odd",
+                        "even",
+                        "mark",
+                        "space"
+                    ],
+                    "default": "none"
+                },
+                "flowControl": {
+                    "$comment": "SerialFlowControl",
+                    "title": "Flow control",
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "xonXoff",
+                        "rtsCts",
+                        "dsrDtr"
+                    ],
+                    "default": "xonXoff"
+                }
+            }
+        },
+        "CategoryConnectionSsh": {
+            "type": "object",
+            "properties": {
+                "crypto": {
+                    "$ref": "#/definitions/CategoryConnectionSshCrypto"
+                },
+                "auth": {
+                    "$ref": "#/definitions/CategoryConnectionSshAuth"
+                },
+                "x11": {
+                    "$ref": "#/definitions/CategoryConnectionSshX11"
+                },
+                "tunnels": {
+                    "$ref": "#/definitions/CategoryConnectionSshTunnels"
+                },
+                "bugs": {
+                    "$ref": "#/definitions/CategoryConnectionSshBugs"
+                },
+                "version": {
+                    "$comment": "SshProt",
+                    "title": "SSH protocol version",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2,
+                    "default": 2
+                },
+                "compression": {
+                    "$comment": "Compression",
+                    "title": "Enable compression",
+                    "type": "boolean",
+                    "default": false
+                },
+                "connectionSharing": {
+                    "$comment": "ConnectionSharing",
+                    "title": "Share SSH connections if possible",
+                    "type": "boolean",
+                    "default": false
+                },
+                "connectingSharingUpstream": {
+                    "$comment": "ConnectionSharingUpstream",
+                    "title": "Upstream (connecting to the real server)",
+                    "type": "boolean",
+                    "default": true
+                },
+                "connectionSharingDownstream": {
+                    "$comment": "ConnectionSharingDownstream",
+                    "title": "Downstream (connecting to the upstream PuTTY)",
+                    "type": "boolean",
+                    "default": true
+                },
+                "remoteCommand": {
+                    "$comment": "RemoteCommand",
+                    "title": "Remote command",
+                    "type": "string"
+                },
+                "noPty": {
+                    "$comment": "NoPTY",
+                    "title": "Don't allocate a pseudo-terminal",
+                    "type": "boolean",
+                    "default": false
+                },
+                "noShell": {
+                    "$comment": "SshNoShell",
+                    "title": "Don't start a shell or command at all",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "CategoryConnectionSshAuth": {
+            "type": "object",
+            "properties": {
+                "bypassAuth": {
+                    "$comment": "SshNoAuth",
+                    "title": "Bypass authentication entirely (SSH-2 only)",
+                    "type": "boolean",
+                    "default": false
+                },
+                "showBanner": {
+                    "$comment": "SshBanner",
+                    "title": "Display pre-authentication banner (SSH-2 only)",
+                    "type": "boolean",
+                    "default": true
+                },
+                "authTisOrCryptoCard": {
+                    "$comment": "AuthTIS",
+                    "title": "Attempt TIS or CryptoCard auth (SSH-1)",
+                    "type": "boolean",
+                    "default": false
+                },
+                "authKeyboardInteractive": {
+                    "$comment": "AuthKI",
+                    "title": "Attempt \"keyboard-interactive\" auth (SSH-2)",
+                    "type": "boolean",
+                    "default": true
+                },
+                "authKeyFile": {
+                    "$comment": "PublicKeyFile",
+                    "title": "Private key file for authentication",
+                    "type": "string"
+                },
+                "authAgent": {
+                    "$comment": "TryAgent",
+                    "title": "Attempt authentication using Pageant",
+                    "type": "boolean",
+                    "default": true
+                },
+                "authGssapi": {
+                    "$comment": "AuthGSSAPI",
+                    "title": "Attempt GSSAPI authentication (SSH-2 only)",
+                    "type": "boolean",
+                    "default": true
+                },
+                "agentForwarding": {
+                    "$comment": "AgentFwd",
+                    "title": "Allow agent forwarding",
+                    "type": "boolean",
+                    "default": false
+                },
+                "gssapiDelegation": {
+                    "$comment": "GssapiFwd",
+                    "title": "Allow GSSAPI credential delegation",
+                    "type": "boolean",
+                    "default": false
+                },
+                "usernameChange": {
+                    "$comment": "ChangeUsername",
+                    "title": "Allow attempted changes of username in SSH-2",
+                    "type": "boolean",
+                    "default": false
+                },
+                "gssapiLibs": {
+                    "$comment": "GSSLibs",
+                    "title": "Preference order for GSSAPI libraries",
+                    "type": "array",
+                    "items": {
+                        "title": "GSSAPI library",
+                        "type": "string",
+                        "enum": [
+                            "gssapi32",
+                            "sspi",
+                            "custom"
+                        ]
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "default": [
+                        "gssapi32",
+                        "sspi",
+                        "custom"
+                    ]
+                },
+                "gssapiCustomLib": {
+                    "$comment": "GSSCustom",
+                    "title": "User-supplied GSSAPI library path",
+                    "type": "string"
+                }
+            }
+        },
+        "CategoryConnectionSshBugs": {
+            "type": "object",
+            "properties": {
+                "closedChannelReplyV2": {
+                    "$comment": "BugChanReq",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Replies to requests on closed channels"
+                },
+                "invalidEncryptionKeysV2": {
+                    "$comment": "BugDeriveKey2",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Miscomputes SSH-2 encryption keys"
+                },
+                "invalidHmacKeysV2": {
+                    "$comment": "BugHMAC2",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Miscomputes SSH-2 HMAC keys"
+                },
+                "maxPacketSizeIgnoredV2": {
+                    "$comment": "BugMaxPkt2",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Ignores SSH-2 maximum packet size"
+                },
+                "messageIgnoreHangV1": {
+                    "$comment": "BugIgnore1",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Chokes on SSH-1 ignore messages"
+                },
+                "messageIgnoreHangV2": {
+                    "$comment": "BugIgnore2",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Chokes on SSH-2 ignore messages"
+                },
+                "messageWinAdjHangV2": {
+                    "$comment": "BugWinadj",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Chokes on PuTTY's SSH-2 'winadj' requests"
+                },
+                "oldDhGexOnlyV2": {
+                    "$comment": "BugOldGex2",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Only supports pre-RFC4419 SSH-2 DH GEX"
+                },
+                "pkAuthSessionIdMisuseV2": {
+                    "$comment": "BugPKSessID2",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Misuses the session ID in SSH-2 PK auth"
+                },
+                "refusesPasswordCamouflageV1": {
+                    "$comment": "BugPlainPW1",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Refuses all SSH-1 password camouflage"
+                },
+                "rekeyBrokenV2": {
+                    "$comment": "BugRekey2",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Handles SSH-2 key re-exchange badly"
+                },
+                "rsaAuthHangV1": {
+                    "$comment": "BugRSA1",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Chokes on SSH-1 RSA authentication"
+                },
+                "rsaSignaturePaddingV2": {
+                    "$comment": "BugRSAPad2",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Requires padding on SSH-2 RSA signatures"
+                }
+            }
+        },
+        "CategoryConnectionSshCrypto": {
+            "type": "object",
+            "properties": {
+                "kex": {
+                    "$comment": "KEX",
+                    "title": "Algorithm selection policy",
+                    "type": "array",
+                    "items": {
+                        "title": "Key exchange algorithm",
+                        "type": "string",
+                        "enum": [
+                            "dh-gex-sha1",
+                            "dh-group1-sha1",
+                            "dh-group14-sha1",
+                            "ecdh",
+                            "rsa",
+                            "WARN"
+                        ]
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "default": [
+                        "ecdh",
+                        "dh-gex-sha1",
+                        "dh-group14-sha1",
+                        "rsa",
+                        "WARN",
+                        "dh-group1-sha1"
+                    ]
+                },
+                "rekeyMaxBytes": {
+                    "$comment": "RekeyBytes",
+                    "title": "Max data before rekey (0 for no limit)",
+                    "type": "string",
+                    "regex": "^(0|[1-9][0-9]*[kKmMgG]?)$",
+                    "default": "1G"
+                },
+                "rekeyMaxInterval": {
+                    "$comment": "RekeyTime",
+                    "title": "Max minutes before rekey (0 for not limit)",
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 60
+                },
+                "gssapiKex": {
+                    "$comment": "AuthGSSAPIKEX",
+                    "title": "Attempt GSSAPI key exchange (SSH-2 only)",
+                    "type": "boolean",
+                    "default": true
+                },
+                "rekeyGssapiCheckInterval": {
+                    "$comment": "GssapiRekey",
+                    "title": "Minutes between GSS checks (0 for never)",
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 2
+                },
+                "hostKeys": {
+                    "$comment": "HostKey",
+                    "title": "Algorithm selection policy",
+                    "type": "array",
+                    "items": {
+                        "title": "Host key algorithm",
+                        "type": "string",
+                        "enum": [
+                            "dsa",
+                            "ecdsa",
+                            "ed25519",
+                            "rsa",
+                            "WARN"
+                        ]
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "default": [
+                        "ed25519",
+                        "ecdsa",
+                        "rsa",
+                        "dsa",
+                        "WARN"
+                    ]
+                },
+                "preferKnownHostKeys": {
+                    "$comment": "PreferKnownHostKeys",
+                    "title": "Prefer algorithms for which a host key is known",
+                    "type": "boolean",
+                    "default": true
+                },
+                "allowedHostKeys": {
+                    "$comment": "SSHManualHostKeys",
+                    "title": "Host keys or fingerprints to accept",
+                    "type": "array",
+                    "items": {
+                        "title": "Host key or fingerprint to accept",
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                },
+                "ciphers": {
+                    "$comment": "Cipher",
+                    "title": "Encryption cipher selection policy",
+                    "type": "array",
+                    "items": {
+                        "title": "Encryption cipher",
+                        "type": "string",
+                        "enum": [
+                            "3des",
+                            "aes",
+                            "arcfour",
+                            "blowfish",
+                            "chacha20",
+                            "des",
+                            "WARN"
+                        ]
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "default": [
+                        "aes",
+                        "chacha20",
+                        "3des",
+                        "WARN",
+                        "des",
+                        "blowfish",
+                        "arcfour"
+                    ]
+                },
+                "allowSingleDes": {
+                    "$comment": "SSH2DES",
+                    "title": "Enable legacy use of single-DES in SSH-2",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "CategoryConnectionSshTunnels": {
+            "type": "object",
+            "properties": {
+                "forwardedPorts": {
+                    "$comment": "PortForwardings",
+                    "title": "Forwarded ports",
+                    "type": "array",
+                    "items": {
+                        "title": "Forwarded port",
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                },
+                "localPortsAcceptAll": {
+                    "$comment": "LocalPortAcceptAll",
+                    "title": "Local ports accept connections from other hosts",
+                    "type": "boolean",
+                    "default": false
+                },
+                "remotePortsAcceptAll": {
+                    "$comment": "RemotePortAcceptAll",
+                    "title": "Remote ports do the same (SSH-2 only)",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "CategoryConnectionSshX11": {
+            "type": "object",
+            "properties": {
+                "x11Forwarding": {
+                    "$comment": "X11Forward",
+                    "title": "Enable X11 forwarding",
+                    "type": "boolean",
+                    "default": false
+                },
+                "x11Display": {
+                    "$comment": "X11Display",
+                    "title": "X display location",
+                    "type": "string"
+                },
+                "x11AuthType": {
+                    "$comment": "X11AuthType",
+                    "title": "Remote X11 authentication protocol",
+                    "type": "string",
+                    "enum": [
+                        "mit-magic-cookie-1",
+                        "xdm-authorization-1"
+                    ],
+                    "default": "mit-magic-cookie-1"
+                },
+                "x11AuthFile": {
+                    "$comment": "X11AuthFile",
+                    "title": "X authority file for local display",
+                    "type": "string"
+                }
+            }
+        },
+        "CategoryConnectionTelnet": {
+            "type": "object",
+            "properties": {
+                "negotiateMode": {
+                    "$comment": "PassiveTelnet",
+                    "title": "Telnet negotiation mode",
+                    "type": "string",
+                    "enum": [
+                        "passive",
+                        "active"
+                    ],
+                    "default": "active"
+                },
+                "keyboardSpecialCommands": {
+                    "$comment": "TelnetKey",
+                    "title": "Keyboard sends Telnet special commands",
+                    "type": "boolean",
+                    "default": false
+                },
+                "returnKeySendsNewLine": {
+                    "$comment": "TelnetRet",
+                    "title": "Return key sends Telnet New Line instead of ^M",
+                    "type": "boolean",
+                    "default": true
+                },
+                "oldEnvironHandling": {
+                    "$comment": "RFCEnviron",
+                    "title": "Handling of OLD_ENVIRON ambiguity",
+                    "type": "string",
+                    "enum": [
+                        "bsd",
+                        "rfc1408"
+                    ],
+                    "default": "bsd"
+                }
+            }
+        },
+        "CategoryConnectionTransport": {
+            "type": "object",
+            "properties": {
+                "ipVersion": {
+                    "$comment": "AddressFamily",
+                    "title": "Internet protocol version",
+                    "type": "string",
+                    "enum": [
+                        "auto",
+                        "ipv4",
+                        "ipv6"
+                    ],
+                    "default": "auto"
+                },
+                "tcpDisableNagle": {
+                    "$comment": "TCPNoDelay",
+                    "title": "Disable Nagle's algorithm (TCP_NODELAY option)",
+                    "type": "boolean",
+                    "default": true
+                },
+                "tcpKeepalives": {
+                    "$comment": "TCPKeepalives",
+                    "title": "Enable TCP keepalives (SO_KEEPALIVE option)",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "CategoryLogging": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$comment": "LogType",
+                    "title": "Session logging",
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "printable",
+                        "session",
+                        "packets",
+                        "raw"
+                    ],
+                    "default": "none"
+                },
+                "path": {
+                    "$comment": "LogFileName",
+                    "title": "Log file name",
+                    "type": "string",
+                    "default": "putty.log" // Windows default
+                },
+                "whenExists": {
+                    "$comment": "LogFileClash",
+                    "title": "What to do if the log file already exists",
+                    "type": "string",
+                    "enum": [
+                        "overwrite",
+                        "append",
+                        "ask"
+                    ],
+                    "default": "ask"
+                },
+                "flushFrequently": {
+                    "$comment": "LogFlush",
+                    "title": "Flush log file frequently",
+                    "type": "boolean",
+                    "default": true
+                },
+                "includeHeader": {
+                    "$comment": "LogHeader",
+                    "title": "Include header",
+                    "type": "boolean",
+                    "default": true
+                },
+                "omitPasswordFields": {
+                    "$comment": "SSHLogOmitPasswords",
+                    "title": "Omit known password fields",
+                    "type": "boolean",
+                    "default": true
+                },
+                "omitSessionData": {
+                    "$comment": "SSHLogOmitData",
+                    "title": "Omit session data",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "CategoryTerminal": {
+            "type": "object",
+            "properties": {
+                "bell": {
+                    "$ref": "#/definitions/CategoryTerminalBell"
+                },
+                "features": {
+                    "$ref": "#/definitions/CategoryTerminalFeatures"
+                },
+                "keyboard": {
+                    "$ref": "#/definitions/CategoryTerminalKeyboard"
+                },
+                "answerback": {
+                    "$comment": "Answerback",
+                    "title": "Answerback to ^E",
+                    "type": "string",
+                    "default": "PuTTY"
+                },
+                "autoWrapMode": {
+                    "$comment": "AutoWrapMode",
+                    "title": "Auto wrap mode initially on",
+                    "type": "boolean",
+                    "default": true
+                },
+                "backgroundColourErase": {
+                    "$comment": "BCE",
+                    "title": "Use background colour to erase screen",
+                    "type": "boolean",
+                    "default": true
+                },
+                "crImpliesLF": {
+                    "$comment": "CRImpliesLF",
+                    "title": "Implicit LF in every CR",
+                    "type": "boolean",
+                    "default": false
+                },
+                "decOriginMode": {
+                    "$comment": "DECOriginMode",
+                    "title": "DEC Origin Mode initially on",
+                    "type": "boolean",
+                    "default": false
+                },
+                "lfImpliesCR": {
+                    "$comment": "LFImpliesCR",
+                    "title": "Implicit CR in every LF",
+                    "type": "boolean",
+                    "default": false
+                },
+                "localEcho": {
+                    "$comment": "LocalEcho",
+                    "title": "Local echo",
+                    "type": "string",
+                    "enum": [
+                        "auto",
+                        "forceOn",
+                        "forceOff"
+                    ],
+                    "default": "auto"
+                },
+                "localEdit": {
+                    "$comment": "LocalEdit",
+                    "title": "Local line editing",
+                    "type": "string",
+                    "enum": [
+                        "auto",
+                        "forceOn",
+                        "forceOff"
+                    ],
+                    "default": "auto"
+                },
+                "printer": {
+                    "$comment": "Printer",
+                    "title": "Printer to send ANSI printer output to",
+                    "type": "string"
+                },
+                "textBlink": {
+                    "$comment": "BlinkText",
+                    "title": "Enabling blinking text",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "CategoryTerminalBell": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "$comment": "Beep",
+                    "title": "Action to happen when a bell occurs",
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "alert",
+                        "flash",
+                        "beep",
+                        "custom"
+                    ],
+                    "default": "alert"
+                },
+                "customAction": {
+                    "$comment": "BellWaveFile",
+                    "title": "Custom sound file to play as a bell",
+                    "type": "string"
+                },
+                "indicator": {
+                    "$comment": "BeepInd",
+                    "title": "Taskbar/caption indication on bell",
+                    "type": "string",
+                    "enum": [
+                        "disabled",
+                        "flashing",
+                        "steady"
+                    ],
+                    "default": "disabled"
+                },
+                "overload": {
+                    "$comment": "BellOverload",
+                    "title": "Bell is temporarily disabled when over-used",
+                    "type": "boolean",
+                    "default": true
+                },
+                "overloadNumber": {
+                    "$comment": "BellOverloadN",
+                    "title": "Over-use means this many bells ...",
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 5
+                },
+                "overloadDuration": {
+                    "$comment": "BellOverloadT",
+                    "title": "... in this many milliseconds",
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 2000
+                },
+                "overloadSuppression": {
+                    "$comment": "BellOverloadS",
+                    "title": "Milliseconds of silence required",
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 5000
+                }
+            }
+        },
+        "CategoryTerminalFeatures": {
+            "type": "object",
+            "properties": {
+                "noAlternateScreenSwitching": {
+                    "$comment": "NoAltScreen",
+                    "title": "Disable switching to alternate terminal screen",
+                    "type": "boolean",
+                    "default": false
+                },
+                "noApplicationCursorKeysMode": {
+                    "$comment": "NoApplicationCursors",
+                    "title": "Disable application cursor keys mode",
+                    "type": "boolean",
+                    "default": false
+                },
+                "noApplicationKeypadMode": {
+                    "$comment": "NoApplicationKeys",
+                    "title": "Disable application keypad mode",
+                    "type": "boolean",
+                    "default": false
+                },
+                "noArabicTextShaping": {
+                    "$comment": "DisableArabicShaping",
+                    "title": "Disable Arabic text shaping",
+                    "type": "boolean",
+                    "default": false
+                },
+                "noBidirectionalTextDisplay": {
+                    "$comment": "DisableBidi",
+                    "title": "Disable bidirectional text display",
+                    "type": "boolean",
+                    "default": false
+                },
+                "noRemoteCharsetConfig": {
+                    "$comment": "NoRemoteCharset",
+                    "title": "Disable remote-controlled character set configuration",
+                    "type": "boolean",
+                    "default": false
+                },
+                "noRemoteDestructiveBackspace": {
+                    "$comment": "NoDBackspace",
+                    "title": "Disable destructive backspace on server sending ^?",
+                    "type": "boolean",
+                    "default": false
+                },
+                "noRemoteScrollbackClear": {
+                    "$comment": "NoRemoteClearScroll",
+                    "title": "Disable remote-controlled clearing of scrollback",
+                    "type": "boolean",
+                    "default": false
+                },
+                "noRemoteTermResize": {
+                    "$comment": "NoRemoteResize",
+                    "title": "Disable remote-controlled terminal resizing",
+                    "type": "boolean",
+                    "default": false
+                },
+                "noRemoteWindowTitle": {
+                    "$comment": "NoRemoteWinTitle",
+                    "title": "Disable remote-controlled window title changing",
+                    "type": "boolean",
+                    "default": false
+                },
+                "remoteTitleQueryResponse": {
+                    "$comment": "RemoteQTitleAction",
+                    "title": "Response to remote title query (SECURITY)",
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "empty",
+                        "title"
+                    ],
+                    "default": "empty"
+                },
+                "noXtermMouseReporting": {
+                    "$comment": "NoMouseReporting",
+                    "title": "Disable xterm-style mouse reporting",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "CategoryTerminalKeyboard": {
+            "type": "object",
+            "properties": {
+                "backspaceKeyMode": {
+                    "$comment": "BackspaceIsDelete",
+                    "title": "The Backspace key",
+                    "type": "string",
+                    "enum": [
+                        "ctrl-h",
+                        "ctrl-?"
+                    ],
+                    "default": "ctrl-?"
+                },
+                "cursorKeysMode": {
+                    "$comment": "ApplicationCursorKeys",
+                    "title": "Initial state of cursor keys",
+                    "type": "string",
+                    "enum": [
+                        "normal",
+                        "application"
+                    ],
+                    "default": "normal"
+                },
+                "functionKeysAndKeypadMode": {
+                    "$comment": "LinuxFunctionKeys",
+                    "title": "The Function keys and keypad",
+                    "type": "string",
+                    "enum": [
+                        "esc[n~",
+                        "linux",
+                        "xtermr6",
+                        "vt400",
+                        "vt100+",
+                        "sco"
+                    ],
+                    "default": "esc[n~"
+                },
+                "homeAndEndKeysMode": {
+                    "$comment": "RXVTHomeEnd",
+                    "title": "The Home and End keys",
+                    "type": "string",
+                    "enum": [
+                        "standard",
+                        "rxvt"
+                    ],
+                    "default": "standard"
+                },
+                "numericKeypadMode": {
+                    "$comment": "ApplicationKeypad",
+                    "title": "Initial state of numeric keypad",
+                    "type": "string",
+                    "enum": [
+                        "normal",
+                        "application",
+                        "netHack"
+                    ],
+                    "default": "normal"
+                },
+                "altGrAsCompose": {
+                    "$comment": "ComposeKey",
+                    "title": "AltGr acts as Compose key",
+                    "type": "boolean",
+                    "default": false
+                },
+                "ctrlAltDistinct": {
+                    "$comment": "CtrlAltKeys",
+                    "title": "Control-Alt is different from AltGr",
+                    "type": "boolean",
+                    "default": true
+                }
+            }
+        },
+        "CategoryWindow": {
+            "type": "object",
+            "properties": {
+                "appearance": {
+                    "$ref": "#/definitions/CategoryWindowAppearance"
+                },
+                "behaviour": {
+                    "$ref": "#/definitions/CategoryWindowBehaviour"
+                },
+                "charset": {
+                    "$ref": "#/definitions/CategoryWindowCharset"
+                },
+                "clipboard": {
+                    "$ref": "#/definitions/CategoryWindowClipboard"
+                },
+                "colours": {
+                    "$ref": "#/definitions/CategoryWindowColours"
+                },
+                "scrollback": {
+                    "$ref": "#/definitions/CategoryWindowScrollback"
+                },
+                "termWidth": {
+                    "$comment": "TermWidth",
+                    "title": "Columns",
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 80
+                },
+                "termHeight": {
+                    "$comment": "TermHeight",
+                    "title": "Rows",
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 24
+                },
+                "termResize": {
+                    "$comment": "LockSize",
+                    "title": "When window is resized",
+                    "type": "string",
+                    "enum": [
+                        "rowsAndColumns",
+                        "fontSize",
+                        "fontSizeWhenMaximised",
+                        "forbid"
+                    ],
+                    "default": "rowsAndColumns"
+                }
+            }
+        },
+        "CategoryWindowAppearance": {
+            "type": "object",
+            "properties": {
+                "boldTextHandling": {
+                    "$comment": "BoldAsColour",
+                    "title": "Indicate bolded text by changing",
+                    "type": "string",
+                    "enum": [
+                        "font",
+                        "colour",
+                        "both"
+                    ],
+                    "default": "colour"
+                },
+                "cursorType": {
+                    "$comment": "CurType",
+                    "title": "Cursor appearance",
+                    "type": "string",
+                    "enum": [
+                        "block",
+                        "underline",
+                        "verticalLine"
+                    ],
+                    "default": "block"
+                },
+                "cursorBlink": {
+                    "$comment": "BlinkCur",
+                    "title": "Cursor blinks",
+                    "type": "boolean",
+                    "default": false
+                },
+                "fontName": {
+                    "$comment": "Font",
+                    "title": "Font name used in the terminal window",
+                    "type": "string",
+                    "default": "Courier New" // Windows default
+                },
+                "fontIsBold": {
+                    "$comment": "FontIsBold",
+                    "title": "Font used in the terminal window is bold",
+                    "type": "boolean",
+                    "default": false // Windows default
+                },
+                "fontSize": {
+                    "$comment": "FontHeight",
+                    "title": "Font size used in the terminal window",
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 10 // Windows default
+                },
+                "fontCharset": {
+                    "$comment": "FontCharSet",
+                    "title": "Font script used in the terminal window",
+                    "type": "string",
+                    "enum": [
+                        "default",
+                        "oem",
+                        "arabic",
+                        "baltic",
+                        "chinese-simplified",
+                        "chinese-traditional",
+                        "eastern-european",
+                        "english",
+                        "greek",
+                        "hebrew",
+                        "japanese",
+                        "korean-hangul",
+                        "korean-johab",
+                        "macintosh",
+                        "russian",
+                        "symbols",
+                        "thai",
+                        "turkish",
+                        "vietnamese"
+                    ],
+                    "default": "english" // Windows default
+                },
+                "fontQuality": {
+                    "$comment": "FontQuality",
+                    "title": "Font quality",
+                    "type": "string",
+                    "enum": [
+                        "antialiased",
+                        "nonAntialiased",
+                        "clearType",
+                        "default"
+                    ],
+                    "default": "default"
+                },
+                "windowBorderGapSize": {
+                    "$comment": "WindowBorder",
+                    "title": "Gap between text and window edge",
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 1
+                },
+                "windowBorderSunkenEdge": {
+                    "$comment": "SunkenEdge",
+                    "title": "Sunken-edge border (slightly thicker)",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "CategoryWindowBehaviour": {
+            "type": "object",
+            "properties": {
+                "alwaysOnTop": {
+                    "$comment": "AlwaysOnTop",
+                    "title": "Ensure window is always on top",
+                    "type": "boolean",
+                    "default": false
+                },
+                "closeOnAltF4": {
+                    "$comment": "AltF4",
+                    "title": "Window closes on ALT-F4",
+                    "type": "boolean",
+                    "default": true
+                },
+                "closeOnExit": {
+                    "$comment": "CloseOnExit",
+                    "title": "Close window on exit",
+                    "type": "string",
+                    "enum": [
+                        "always",
+                        "never",
+                        "cleanExit"
+                    ],
+                    "default": "cleanExit"
+                },
+                "fullScreenOnAltEnter": {
+                    "$comment": "FullScreenOnAltEnter",
+                    "title": "Full screen on Alt-Enter",
+                    "type": "boolean",
+                    "default": false
+                },
+                "hideMouseWhenTyping": {
+                    "$comment": "HideMousePtr",
+                    "title": "Hide the mouse pointer when typing in window",
+                    "type": "boolean",
+                    "default": false
+                },
+                "ignoreIconTitle": {
+                    "$comment": "WinNameAlways",
+                    "title": "Only use the supplied window title",
+                    "type": "boolean",
+                    "default": true
+                },
+                "systemMenuOnAlt": {
+                    "$comment": "AltOnly",
+                    "title": "System menu appears on ALT alone",
+                    "type": "boolean",
+                    "default": false
+                },
+                "systemMenuOnAltSpace": {
+                    "$comment": "AltSpace",
+                    "title": "System menu appears on ALT-Space",
+                    "type": "boolean",
+                    "default": false
+                },
+                "warnOnClose": {
+                    "$comment": "WarnOnClose",
+                    "title": "Warn before closing window",
+                    "type": "boolean",
+                    "default": true
+                },
+                "windowTitle": {
+                    "$comment": "WinTitle",
+                    "title": "Window title",
+                    "type": "string"
+                }
+            }
+        },
+        "CategoryWindowCharset": {
+            "type": "object",
+            "properties": {
+                "remoteCharset": {
+                    "$comment": "LineCodePage",
+                    "title": "Remote character set",
+                    "type": "string",
+                    "default": "UTF-8"
+                },
+                "lineDrawingMode": {
+                    "$comment": "FontVTMode",
+                    "title": "Handling of line drawing characters",
+                    "type": "string",
+                    "enum": [
+                        "unicode",
+                        "emulate",
+                        "xwindows",
+                        "ansiAndOem",
+                        "oem"
+                    ],
+                    "default": "unicode"
+                },
+                "ambiguousCjkAsWide": {
+                    "$comment": "CJKAmbigWide",
+                    "title": "Treat CJK ambiguous characters as wide",
+                    "type": "boolean",
+                    "default": false
+                },
+                "capsLockForCyrillic": {
+                    "$comment": "CapsLockCyr",
+                    "title": "Caps Lock acts as Cyrillic switch",
+                    "type": "boolean",
+                    "default": false
+                },
+                "vt100CopyPasteAsAsciiChars": {
+                    "$comment": "RawCNP",
+                    "title": "Copy and paste line drawing characters as lqqqk",
+                    "type": "boolean",
+                    "default": false
+                },
+                "vt100LineDrawingInUtf8Mode": {
+                    "$comment": "UTF8linedraw",
+                    "title": "Enable VT100 line drawing even in UTF-8 mode",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "CategoryWindowClipboard": {
+            "type": "object",
+            "properties": {
+                "selectionMode": {
+                    "$comment": "RectSelect",
+                    "title": "Default selection mode (Alt+drag does the other one)",
+                    "type": "string",
+                    "enum": [
+                        "normal",
+                        "rectangular"
+                    ],
+                    "default": "normal"
+                },
+                "mouseButtonsMode": {
+                    "$comment": "MouseIsXterm",
+                    "title": "Action of mouse buttons",
+                    "type": "string",
+                    "enum": [
+                        "windows",
+                        "compromise",
+                        "xterm"
+                    ],
+                    "default": "compromise"
+                },
+                "mouseModeShiftOverride": {
+                    "$comment": "MouseOverride",
+                    "title": "Shift overrides application's use of mouse",
+                    "type": "boolean",
+                    "default": true
+                },
+                "mouseAutocopy": {
+                    "$comment": "MouseAutocopy",
+                    "title": "Auto-copy selected text to system clipboard",
+                    "type": "boolean",
+                    "default": true
+                },
+                "actionMousePaste": {
+                    "$comment": "MousePaste",
+                    "title": "Mouse paste action",
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "lastSelected",
+                        "systemClipboard"
+                    ],
+                    "default": "systemClipboard"
+                },
+                "actionCtrlShiftIns": {
+                    "$comment": "CtrlShiftIns",
+                    "title": "{Ctrl,Shift} + Ins",
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "lastSelected",
+                        "systemClipboard"
+                    ],
+                    "default": "systemClipboard"
+                },
+                "actionCtrlShiftCV": {
+                    "$comment": "CtrlShiftCV",
+                    "title": "Ctrl + Shift + {C,V}",
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "lastSelected",
+                        "systemClipboard"
+                    ],
+                    "default": "none"
+                },
+                "allowControlChars": {
+                    "$comment": "PasteControls",
+                    "title": "Permit control characters in pasted text",
+                    "type": "boolean",
+                    "default": false
+                },
+                "copyAsRtf": {
+                    "$comment": "PasteRTF",
+                    "title": "Copy to clipboard in RTF as well as plain text",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "CategoryWindowColours": {
+            "type": "object",
+            "properties": {
+                "customize": {
+                    "$ref": "#/definitions/CategoryWindowColoursCustomise"
+                },
+                "ansi": {
+                    "$comment": "ANSIColour",
+                    "title": "Allow terminal to specify ANSI colours",
+                    "type": "boolean",
+                    "default": true
+                },
+                "xterm": {
+                    "$comment": "Xterm256Colour",
+                    "title": "Allow terminal to use xterm 256-colour mode",
+                    "type": "boolean",
+                    "default": true
+                },
+                "trueColour": {
+                    "$comment": "TrueColour",
+                    "title": "Allow terminal to use 24-bit colours",
+                    "type": "boolean",
+                    "default": true
+                },
+                "logicalPalettes": {
+                    "$comment": "TryPalette",
+                    "title": "Attempt to use logical palettes",
+                    "type": "boolean",
+                    "default": false
+                },
+                "inheritSystem": {
+                    "$comment": "UseSystemColours",
+                    "title": "Use system colours",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "CategoryWindowColoursCustomise": {
+            "type": "object",
+            "properties": {
+                "foreground": {
+                    "$comment": "Colour0",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "Default Foreground",
+                    "default": [
+                        187,
+                        187,
+                        187
+                    ]
+                },
+                "foregroundBold": {
+                    "$comment": "Colour1",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "Default Bold Foreground",
+                    "default": [
+                        255,
+                        255,
+                        255
+                    ]
+                },
+                "background": {
+                    "$comment": "Colour2",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "Default Background",
+                    "default": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "backgroundBold": {
+                    "$comment": "Colour3",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "Default Bold Background",
+                    "default": [
+                        85,
+                        85,
+                        85
+                    ]
+                },
+                "cursorText": {
+                    "$comment": "Colour4",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "Cursor Text",
+                    "default": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "cursor": {
+                    "$comment": "Colour5",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "Cursor Colour",
+                    "default": [
+                        0,
+                        255,
+                        0
+                    ]
+                },
+                "black": {
+                    "$comment": "Colour6",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Black",
+                    "default": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "blackBold": {
+                    "$comment": "Colour7",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Black Bold",
+                    "default": [
+                        85,
+                        85,
+                        85
+                    ]
+                },
+                "red": {
+                    "$comment": "Colour8",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Red",
+                    "default": [
+                        187,
+                        0,
+                        0
+                    ]
+                },
+                "redBold": {
+                    "$comment": "Colour9",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Red Bold",
+                    "default": [
+                        255,
+                        85,
+                        85
+                    ]
+                },
+                "green": {
+                    "$comment": "Colour10",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Green",
+                    "default": [
+                        0,
+                        187,
+                        0
+                    ]
+                },
+                "greenBold": {
+                    "$comment": "Colour11",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Green Bold",
+                    "default": [
+                        85,
+                        255,
+                        85
+                    ]
+                },
+                "yellow": {
+                    "$comment": "Colour12",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Yellow",
+                    "default": [
+                        187,
+                        187,
+                        0
+                    ]
+                },
+                "yellowBold": {
+                    "$comment": "Colour13",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Yellow Bold",
+                    "default": [
+                        255,
+                        255,
+                        85
+                    ]
+                },
+                "blue": {
+                    "$comment": "Colour14",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Blue",
+                    "default": [
+                        0,
+                        0,
+                        187
+                    ]
+                },
+                "blueBold": {
+                    "$comment": "Colour15",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Blue Bold",
+                    "default": [
+                        85,
+                        85,
+                        255
+                    ]
+                },
+                "magenta": {
+                    "$comment": "Colour16",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Magenta",
+                    "default": [
+                        187,
+                        0,
+                        187
+                    ]
+                },
+                "magentaBold": {
+                    "$comment": "Colour17",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Magenta Bold",
+                    "default": [
+                        255,
+                        85,
+                        255
+                    ]
+                },
+                "cyan": {
+                    "$comment": "Colour18",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Cyan",
+                    "default": [
+                        0,
+                        187,
+                        187
+                    ]
+                },
+                "cyanBold": {
+                    "$comment": "Colour19",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI Cyan Bold",
+                    "default": [
+                        85,
+                        255,
+                        255
+                    ]
+                },
+                "white": {
+                    "$comment": "Colour20",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI White",
+                    "default": [
+                        187,
+                        187,
+                        187
+                    ]
+                },
+                "whiteBold": {
+                    "$comment": "Colour21",
+                    "$ref": "#/definitions/TypeRgbTuple",
+                    "title": "ANSI White Bold",
+                    "default": [
+                        255,
+                        255,
+                        255
+                    ]
+                }
+            }
+        },
+        "CategoryWindowScrollback": {
+            "type": "object",
+            "properties": {
+                "displayScrollbar": {
+                    "$comment": "ScrollBar",
+                    "title": "Display scrollbar",
+                    "type": "boolean",
+                    "default": true
+                },
+                "displayScrollbarInFullScreen": {
+                    "$comment": "ScrollBarFullScreen",
+                    "title": "Display scrollbar in full screen mode",
+                    "type": "boolean",
+                    "default": false
+                },
+                "erasedTextIntoScrollback": {
+                    "$comment": "EraseToScrollback",
+                    "title": "Push erased text into scrollback",
+                    "type": "boolean",
+                    "default": true
+                },
+                "maxLines": {
+                    "$comment": "ScrollbackLines",
+                    "title": "Lines of scrollback",
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 2000
+                },
+                "resetOnDisplayActivity": {
+                    "$comment": "ScrollOnDisp",
+                    "title": "Reset scrollback on display activity",
+                    "type": "boolean",
+                    "default": true
+                },
+                "resetOnKeypress": {
+                    "$comment": "ScrollOnKey",
+                    "title": "Reset scrollback on keypress",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "TypeAutoOnOff": {
+            "type": "string",
+            "enum": [
+                "auto",
+                "off",
+                "on"
+            ],
+            "default": "auto"
+        },
+        "TypeIpPort": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+        },
+        "TypeRgbTuple": {
+            "title": "RGB tuple",
+            "type": "array",
+            "items": [
+                {
+                    "title": "Red value",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 255
+                },
+                {
+                    "title": "Green value",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 255
+                },
+                {
+                    "title": "Blue value",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 255
+                }
+            ],
+            "additionalItems": false
+        }
+    },
+    "properties": {
+        "inherits": {
+            "title": "Inherited configurations",
+            "type": "array"
+        },
+        "connection": {
+            "$ref": "#/definitions/CategoryConnection"
+        },
+        "logging": {
+            "$ref": "#/definitions/CategoryLogging"
+        },
+        "terminal": {
+            "$ref": "#/definitions/CategoryTerminal"
+        },
+        "window": {
+            "$ref": "#/definitions/CategoryWindow"
+        }
+    }
+}
