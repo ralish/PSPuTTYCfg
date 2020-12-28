@@ -1,0 +1,24 @@
+{
+    // Important to disable for EditorConfig to apply correctly
+    // See: https://github.com/editorconfig/editorconfig-vscode/issues/153
+    "files.trimTrailingWhitespace": false,
+
+    // Markdown table of contents generation
+    "markdown.extension.toc.levels": "2..2",
+    "markdown.extension.toc.slugifyMode": "github",
+
+    // PowerShell script analysis
+    "powershell.scriptAnalysis.settingsPath": "PSScriptAnalyzerSettings.psd1",
+
+    // PowerShell code formatting
+    "powershell.codeFormatting.autoCorrectAliases": true,
+    "powershell.codeFormatting.newLineAfterCloseBrace": false,
+    "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
+    "powershell.codeFormatting.trimWhitespaceAroundPipe": true,
+    "powershell.codeFormatting.useCorrectCasing": true,
+    "powershell.codeFormatting.whitespaceBetweenParameters": true,
+
+    "[powershell]": {
+        "editor.formatOnSave": true
+    }
+}
