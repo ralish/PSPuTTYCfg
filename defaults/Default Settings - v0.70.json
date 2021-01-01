@@ -1,0 +1,355 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ralish/PSPuTTYCfg/stable/schemas/session.jsonc",
+  "connection": {
+    "data": {
+      "envVars": [],
+      "termSpeed": "38400,38400",
+      "termType": "xterm",
+      "username": "",
+      "usernameFallback": "prompt"
+    },
+    "host": "",
+    "keepaliveInterval": 0,
+    "logicalHost": "",
+    "port": 22,
+    "protocol": "ssh",
+    "proxy": {
+      "command": "connect %host %port\\n",
+      "exclusions": [],
+      "host": "proxy",
+      "password": "",
+      "port": 80,
+      "proxyDns": "auto",
+      "proxyLocalhost": false,
+      "termLog": "no",
+      "type": "none",
+      "username": ""
+    },
+    "rlogin": {
+      "localUsername": ""
+    },
+    "serial": {
+      "dataBits": 8,
+      "flowControl": "xonXoff",
+      "line": "COM1",
+      "parity": "none",
+      "speed": 9600,
+      "stopHalfBits": 2
+    },
+    "ssh": {
+      "auth": {
+        "agentForwarding": false,
+        "authAgent": true,
+        "authGssapi": true,
+        "authKeyboardInteractive": true,
+        "authKeyFile": "",
+        "authTisOrCryptoCard": false,
+        "bypassAuth": false,
+        "gssapiCustomLib": "",
+        "gssapiDelegation": false,
+        "gssapiLibs": [
+          "gssapi32",
+          "sspi",
+          "custom"
+        ],
+        "showBanner": true,
+        "usernameChange": false
+      },
+      "bugs": {
+        "closedChannelReplyV2": "auto",
+        "invalidEncryptionKeysV2": "auto",
+        "invalidHmacKeysV2": "auto",
+        "maxPacketSizeIgnoredV2": "auto",
+        "messageIgnoreHangV1": "auto",
+        "messageIgnoreHangV2": "auto",
+        "messageWinAdjHangV2": "auto",
+        "oldDhGexOnlyV2": "auto",
+        "pkAuthSessionIdMisuseV2": "auto",
+        "refusesPasswordCamouflageV1": "auto",
+        "rekeyBrokenV2": "auto",
+        "rsaAuthHangV1": "auto",
+        "rsaSignaturePaddingV2": "auto"
+      },
+      "compression": false,
+      "connectingSharingUpstream": true,
+      "connectionSharing": false,
+      "connectionSharingDownstream": true,
+      "crypto": {
+        "allowedHostKeys": [],
+        "allowSingleDes": false,
+        "ciphers": [
+          "aes",
+          "chacha20",
+          "blowfish",
+          "3des",
+          "WARN",
+          "arcfour",
+          "des"
+        ],
+        "hostKeys": [
+          "ed25519",
+          "ecdsa",
+          "rsa",
+          "dsa",
+          "WARN"
+        ],
+        "kex": [
+          "ecdh",
+          "dh-gex-sha1",
+          "dh-group14-sha1",
+          "rsa",
+          "WARN",
+          "dh-group1-sha1"
+        ],
+        "rekeyMaxBytes": "1G",
+        "rekeyMaxInterval": 60
+      },
+      "noPty": false,
+      "noShell": false,
+      "remoteCommand": "",
+      "tunnels": {
+        "forwardedPorts": [],
+        "localPortsAcceptAll": false,
+        "remotePortsAcceptAll": false
+      },
+      "version": 2,
+      "x11": {
+        "x11AuthFile": "",
+        "x11AuthType": "mit-magic-cookie-1",
+        "x11Display": "",
+        "x11Forwarding": false
+      }
+    },
+    "telnet": {
+      "keyboardSpecialCommands": false,
+      "negotiateMode": "active",
+      "oldEnvironHandling": "bsd",
+      "returnKeySendsNewLine": true
+    },
+    "transport": {
+      "ipVersion": "auto",
+      "tcpDisableNagle": true,
+      "tcpKeepalives": false
+    }
+  },
+  "logging": {
+    "flushFrequently": true,
+    "omitPasswordFields": true,
+    "omitSessionData": false,
+    "path": "putty.log",
+    "type": "none",
+    "whenExists": "ask"
+  },
+  "terminal": {
+    "answerback": "PuTTY",
+    "autoWrapMode": true,
+    "backgroundColourErase": true,
+    "bell": {
+      "action": "alert",
+      "customAction": "",
+      "indicator": "disabled",
+      "overload": true,
+      "overloadDuration": 2000,
+      "overloadNumber": 5,
+      "overloadSuppression": 5000
+    },
+    "crImpliesLF": false,
+    "decOriginMode": false,
+    "features": {
+      "noAlternateScreenSwitching": false,
+      "noApplicationCursorKeysMode": false,
+      "noApplicationKeypadMode": false,
+      "noArabicTextShaping": false,
+      "noBidirectionalTextDisplay": false,
+      "noRemoteCharsetConfig": false,
+      "noRemoteDestructiveBackspace": false,
+      "noRemoteScrollbackClear": false,
+      "noRemoteTermResize": false,
+      "noRemoteWindowTitle": false,
+      "noXtermMouseReporting": false,
+      "remoteTitleQueryResponse": "empty"
+    },
+    "keyboard": {
+      "altGrAsCompose": false,
+      "backspaceKeyMode": "ctrl-?",
+      "ctrlAltDistinct": true,
+      "cursorKeysMode": "normal",
+      "functionKeysAndKeypadMode": "esc[n~",
+      "homeAndEndKeysMode": "standard",
+      "numericKeypadMode": "normal"
+    },
+    "lfImpliesCR": false,
+    "localEcho": "auto",
+    "localEdit": "auto",
+    "printer": "",
+    "textBlink": false
+  },
+  "window": {
+    "appearance": {
+      "boldTextHandling": "colour",
+      "cursorBlink": false,
+      "cursorType": "block",
+      "fontCharset": "english",
+      "fontIsBold": false,
+      "fontName": "Courier New",
+      "fontQuality": "default",
+      "fontSize": 10,
+      "windowBorderGapSize": 1,
+      "windowBorderSunkenEdge": false
+    },
+    "behaviour": {
+      "alwaysOnTop": false,
+      "closeOnAltF4": true,
+      "closeOnExit": "cleanExit",
+      "fullScreenOnAltEnter": false,
+      "hideMouseWhenTyping": false,
+      "ignoreIconTitle": true,
+      "systemMenuOnAlt": false,
+      "systemMenuOnAltSpace": false,
+      "warnOnClose": true,
+      "windowTitle": ""
+    },
+    "charset": {
+      "ambiguousCjkAsWide": false,
+      "capsLockForCyrillic": false,
+      "lineDrawingMode": "unicode",
+      "remoteCharset": "",
+      "vt100CopyPasteAsAsciiChars": false
+    },
+    "clipboard": {
+      "copyAsRtf": false,
+      "mouseButtonsMode": "compromise",
+      "mouseModeShiftOverride": true,
+      "selectionMode": "normal"
+    },
+    "colours": {
+      "ansi": true,
+      "customise": {
+        "background": [
+          "0",
+          "0",
+          "0"
+        ],
+        "backgroundBold": [
+          "85",
+          "85",
+          "85"
+        ],
+        "black": [
+          "0",
+          "0",
+          "0"
+        ],
+        "blackBold": [
+          "85",
+          "85",
+          "85"
+        ],
+        "blue": [
+          "0",
+          "0",
+          "187"
+        ],
+        "blueBold": [
+          "85",
+          "85",
+          "255"
+        ],
+        "cursor": [
+          "0",
+          "255",
+          "0"
+        ],
+        "cursorText": [
+          "0",
+          "0",
+          "0"
+        ],
+        "cyan": [
+          "0",
+          "187",
+          "187"
+        ],
+        "cyanBold": [
+          "85",
+          "255",
+          "255"
+        ],
+        "foreground": [
+          "187",
+          "187",
+          "187"
+        ],
+        "foregroundBold": [
+          "255",
+          "255",
+          "255"
+        ],
+        "green": [
+          "0",
+          "187",
+          "0"
+        ],
+        "greenBold": [
+          "85",
+          "255",
+          "85"
+        ],
+        "magenta": [
+          "187",
+          "0",
+          "187"
+        ],
+        "magentaBold": [
+          "255",
+          "85",
+          "255"
+        ],
+        "red": [
+          "187",
+          "0",
+          "0"
+        ],
+        "redBold": [
+          "255",
+          "85",
+          "85"
+        ],
+        "white": [
+          "187",
+          "187",
+          "187"
+        ],
+        "whiteBold": [
+          "255",
+          "255",
+          "255"
+        ],
+        "yellow": [
+          "187",
+          "187",
+          "0"
+        ],
+        "yellowBold": [
+          "255",
+          "255",
+          "85"
+        ]
+      },
+      "inheritSystem": false,
+      "logicalPalettes": false,
+      "xterm": true
+    },
+    "scrollback": {
+      "displayScrollbar": true,
+      "displayScrollbarInFullScreen": false,
+      "erasedTextIntoScrollback": true,
+      "maxLines": 2000,
+      "resetOnDisplayActivity": true,
+      "resetOnKeypress": false
+    },
+    "termHeight": 24,
+    "termResize": "rowsAndColumns",
+    "termWidth": 80
+  }
+}
