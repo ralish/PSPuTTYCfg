@@ -1,9 +1,9 @@
-PSPuTTTYCfg
+PSPuTTYCfg
 ===========
 
-[![pwsh ver](https://img.shields.io/powershellgallery/v/PSPuTTTYCfg)](https://www.powershellgallery.com/packages/PSPuTTTYCfg)
-[![pwsh dl](https://img.shields.io/powershellgallery/dt/PSPuTTTYCfg)](https://www.powershellgallery.com/packages/PSPuTTTYCfg)
-[![license](https://img.shields.io/github/license/ralish/PSPuTTTYCfg)](https://choosealicense.com/licenses/mit/)
+[![pwsh ver](https://img.shields.io/powershellgallery/v/PSPuTTYCfg)](https://www.powershellgallery.com/packages/PSPuTTYCfg)
+[![pwsh dl](https://img.shields.io/powershellgallery/dt/PSPuTTYCfg)](https://www.powershellgallery.com/packages/PSPuTTYCfg)
+[![license](https://img.shields.io/github/license/ralish/PSPuTTYCfg)](https://choosealicense.com/licenses/mit/)
 
 A PowerShell module to manage PuTTY sessions on Windows platforms as JSON configurations.
 
@@ -98,18 +98,18 @@ Installing
 
 ### PowerShellGet (included with PowerShell 5.0)
 
-The module is published to the [PowerShell Gallery](https://www.powershellgallery.com/packages/PSPuTTTYCfg):
+The module is published to the [PowerShell Gallery](https://www.powershellgallery.com/packages/PSPuTTYCfg):
 
 ```posh
-Install-Module -Name PSPuTTTYCfg
+Install-Module -Name PSPuTTYCfg
 ```
 
 ### ZIP File
 
-Download the [ZIP file](https://github.com/ralish/PSPuTTTYCfg/archive/stable.zip) of the latest release and unpack it to one of the following locations:
+Download the [ZIP file](https://github.com/ralish/PSPuTTYCfg/archive/stable.zip) of the latest release and unpack it to one of the following locations:
 
-- Current user: `C:\Users\<your.account>\Documents\WindowsPowerShell\Modules\PSPuTTTYCfg`
-- All users: `C:\Program Files\WindowsPowerShell\Modules\PSPuTTTYCfg`
+- Current user: `C:\Users\<your.account>\Documents\WindowsPowerShell\Modules\PSPuTTYCfg`
+- All users: `C:\Program Files\WindowsPowerShell\Modules\PSPuTTYCfg`
 
 ### Git Clone
 
@@ -120,7 +120,7 @@ You can also clone the repository into one of the above locations if you'd like 
 You can check that PowerShell is able to locate the module by running the following at a PowerShell prompt:
 
 ```posh
-Get-Module PSPuTTTYCfg -ListAvailable
+Get-Module PSPuTTYCfg -ListAvailable
 ```
 
 License
