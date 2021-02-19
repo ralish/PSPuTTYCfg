@@ -776,7 +776,7 @@ Function Import-PuTTYSessionFromRegistry {
     Write-Debug -Message 'Enumerating registry sessions ...'
     try {
         $RegSessions = Get-ChildItem -Path $RegSessionsPath -ErrorAction Stop
-    } catch [ItemNotFoundException] {
+    } catch [Management.Automation.ItemNotFoundException] {
         Write-Error -Message ('Saved sessions registry key does not exist: {0}' -f $RegSessionsPath)
         return
     }
@@ -824,7 +824,7 @@ Function Set-PuTTYSessionRegistry {
             Write-Warning -Message ('Skipping existing registry session: {0}' -f $Session.Name)
             return
         }
-    } catch [ItemNotFoundException] {
+    } catch [Management.Automation.ItemNotFoundException] {
         $null = New-Item -Path $RegSessionsPath -Name $RegSessionName
     }
 
