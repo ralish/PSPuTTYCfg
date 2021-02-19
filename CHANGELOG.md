@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.2.2
+------
+
+- Fix broken catch statements on `ItemNotFoundException` due to unqualified name
+
 v0.2.1
 ------
 
