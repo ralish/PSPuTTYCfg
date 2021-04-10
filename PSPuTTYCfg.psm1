@@ -747,6 +747,11 @@ Function Export-PuTTYSessionToRegistry {
             $DefaultsPath = Join-Path -Path $PSScriptRoot -ChildPath ('defaults\Default Settings - v{0}.json' -f $Defaults)
             $DefaultsFile = Get-Item -Path $DefaultsPath -ErrorAction Stop
             $DefaultSettings = Import-PuTTYSession -Path $DefaultsFile -Verbose:$false
+
+            if (!(Test-Path -Path $RegSessionsPath -PathType Container)) {
+                Write-Debug -Message ('Creating saved sessions registry key: {0}' -f $RegSessionsPath)
+                $null = New-Item -Path $RegSessionsPath -Force -ErrorAction Stop
+            }
         } catch {
             throw $_
         }
