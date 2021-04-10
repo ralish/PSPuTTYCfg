@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.2.3
+------
+
+- Create the saved sessions registry key on import if necessary
+
 v0.2.2
 ------
 
