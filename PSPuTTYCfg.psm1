@@ -128,7 +128,7 @@ Function Export-PuTTYSession {
         [Switch]$Registry,
 
         [Parameter(ParameterSetName = 'Registry')]
-        [ValidateSet('0.70', '0.71', '0.72', '0.73', '0.74')]
+        [ValidateSet('0.70', '0.71', '0.72', '0.73', '0.74', '0.75')]
         [String]$Defaults = '0.74',
 
         [Switch]$Force

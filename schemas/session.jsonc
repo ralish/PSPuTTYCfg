@@ -626,6 +626,7 @@
                             "dsa",
                             "ecdsa",
                             "ed25519",
+                            "ed448",
                             "rsa",
                             "WARN"
                         ]
@@ -633,6 +634,7 @@
                     "minItems": 1,
                     "uniqueItems": true,
                     "default": [
+                        "ed448",
                         "ed25519",
                         "ecdsa",
                         "rsa",

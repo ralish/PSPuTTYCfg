@@ -737,7 +737,7 @@
             "reg": {
                 "name": "HostKey",
                 "type": "String",
-                "default": "ed25519,ecdsa,rsa,dsa,WARN"
+                "default": "ed448,ed25519,ecdsa,rsa,dsa,WARN"
             }
         },
         {
