@@ -187,6 +187,10 @@ Windows Registry Editor Version 5.00
 "SshProt"=dword:00000003
 "StampUtmp"=dword:00000001
 "SunkenEdge"=dword:00000000
+"SUPDUPCharset"=dword:00000000
+"SUPDUPLocation"="The Internet"
+"SUPDUPMoreProcessing"=dword:00000000
+"SUPDUPScrolling"=dword:00000000
 "TCPKeepalives"=dword:00000000
 "TCPNoDelay"=dword:00000001
 "TelnetKey"=dword:00000000

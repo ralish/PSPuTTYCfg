@@ -124,6 +124,12 @@
         "x11Forwarding": false
       }
     },
+    "supdup": {
+      "charsetExtension": "none",
+      "location": "The Internet",
+      "moreProcessing": false,
+      "terminalScrolling": false
+    },
     "telnet": {
       "keyboardSpecialCommands": false,
       "negotiateMode": "active",

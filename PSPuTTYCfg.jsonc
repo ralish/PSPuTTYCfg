@@ -1053,6 +1053,60 @@
                 "default": ""
             }
         },
+        // Connection -> SUPDUP
+        {
+            "json": {
+                "name": "location",
+                "path": "/connection/supdup",
+                "type": "string"
+            },
+            "reg": {
+                "name": "SUPDUPLocation",
+                "type": "String",
+                "default": "The Internet"
+            }
+        },
+        {
+            "enum": {
+                "none": 0,
+                "its": 1,
+                "waits": 2
+            },
+            "json": {
+                "name": "charsetExtension",
+                "path": "/connection/supdup",
+                "type": "string"
+            },
+            "reg": {
+                "name": "SUPDUPCharset",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "moreProcessing",
+                "path": "/connection/supdup",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "SUPDUPMoreProcessing",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
+                "name": "terminalScrolling",
+                "path": "/connection/supdup",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "SUPDUPScrolling",
+                "type": "DWord",
+                "default": 0
+            }
+        },
         // Connection -> Telnet
         {
             "enum": {

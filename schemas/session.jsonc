@@ -28,6 +28,9 @@
                 "serial": {
                     "$ref": "#/definitions/CategoryConnectionSerial"
                 },
+                "supdup": {
+                    "$ref": "#/definitions/CategoryConnectionSupdup"
+                },
                 "protocol": {
                     "$comment": "Protocol",
                     "title": "Connection type",
@@ -37,9 +40,9 @@
                         "telnet",
                         "rlogin",
                         "ssh",
-                        "ssh-connection", // Not in UI
+                        "ssh-connection",
                         "serial",
-                        "supdup" // Not in UI
+                        "supdup"
                     ],
                     "default": "ssh"
                 },
@@ -750,6 +753,39 @@
                     "$comment": "X11AuthFile",
                     "title": "X authority file for local display",
                     "type": "string"
+                }
+            }
+        },
+        "CategoryConnectionSupdup": {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "$comment": "SUPDUPLocation",
+                    "title": "User location",
+                    "type": "string"
+                },
+                "charsetExtension": {
+                    "$comment": "SUPDUPCharset",
+                    "title": "Character set extension",
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "its",
+                        "waits"
+                    ],
+                    "default": "none"
+                },
+                "moreProcessing": {
+                    "$comment": "SUPDUPMoreProcessing",
+                    "title": "Enable **MORE** processing",
+                    "type": "boolean",
+                    "default": false
+                },
+                "terminalScrolling": {
+                    "$comment": "SUPDUPScrolling",
+                    "title": "Enable terminal scrolling",
+                    "type": "boolean",
+                    "default": false
                 }
             }
         },
