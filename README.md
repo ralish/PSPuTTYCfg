@@ -5,6 +5,8 @@ PSPuTTYCfg
 [![pwsh dl](https://img.shields.io/powershellgallery/dt/PSPuTTYCfg)](https://www.powershellgallery.com/packages/PSPuTTYCfg)
 [![license](https://img.shields.io/github/license/ralish/PSPuTTYCfg)](https://choosealicense.com/licenses/mit/)
 
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/ralish/PSPuTTYCfg)
+
 A PowerShell module to manage PuTTY sessions on Windows platforms as JSON configurations.
 
 - [Usage](#usage)
