@@ -485,6 +485,18 @@
         },
         {
             "json": {
+                "name": "trivialAuthDisconnect",
+                "path": "/connection/ssh/auth",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "SshNoTrivialAuth",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "json": {
                 "name": "authAgent",
                 "path": "/connection/ssh/auth",
                 "type": "boolean"

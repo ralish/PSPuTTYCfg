@@ -416,6 +416,12 @@
                     "type": "boolean",
                     "default": true
                 },
+                "trivialAuthDisconnect": {
+                    "$comment": "SshNoTrivialAuth",
+                    "title": "Disconnect if authentication succeeds trivially",
+                    "type": "boolean",
+                    "default": false
+                },
                 "authTisOrCryptoCard": {
                     "$comment": "AuthTIS",
                     "title": "Attempt TIS or CryptoCard auth (SSH-1)",
