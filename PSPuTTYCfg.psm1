@@ -303,6 +303,7 @@ Function Add-PuTTYSetting {
 }
 
 Function Merge-PuTTYSettings {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory)]
