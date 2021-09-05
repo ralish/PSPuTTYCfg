@@ -145,8 +145,8 @@ Function Export-PuTTYSession {
 
     End {
         switch ($PSCmdlet.ParameterSetName) {
-            'Json' { $Sessions | Export-PuTTYSessionToJson -Path $Path -Force:$Force }
-            'Registry' { $Sessions | Export-PuTTYSessionToRegistry -Defaults $Defaults -Force:$Force }
+            'Json' { Export-PuTTYSessionToJson -Session $Sessions -Path $Path -Force:$Force }
+            'Registry' { Export-PuTTYSessionToRegistry -Session $Sessions -Defaults $Defaults -Force:$Force }
             Default { throw ('Unknown provider: {0}' -f $PSCmdlet.ParameterSetName) }
         }
     }
@@ -398,42 +398,54 @@ Function Add-PuTTYSessionJsonInherit {
 Function Convert-PuTTYSessionJsonToDotNet {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory, ValueFromPipeline)]
-        [IO.FileInfo]$JsonSession
+        [Parameter(Mandatory)]
+        [IO.FileInfo[]]$JsonSession
     )
 
     Begin {
         $DotNetSessions = [Collections.ArrayList]::new()
+
+        $WriteProgressParams = @{
+            Activity = 'Importing PuTTY sessions'
+        }
     }
 
     Process {
-        $SessionName = $JsonSession.BaseName
-        Write-Verbose -Message ('Importing JSON session: {0}' -f $SessionName)
+        for ($Index = 0; $Index -lt $JsonSession.Count; $Index++) {
+            $CurrentSession = $JsonSession[$Index]
+            $SessionName = $CurrentSession.BaseName
+            $SessionPath = $CurrentSession.FullName
 
-        try {
-            $JsonContent = Get-Content -LiteralPath $JsonSession.FullName -Raw -ErrorAction Stop
-            $JsonSettings = $JsonContent | ConvertFrom-Json -NoEnumerate -ErrorAction Stop
-        } catch {
-            Write-Error -Message $_
-            continue
-        }
+            $WriteProgressParams['Status'] = 'Importing from JSON: {0}' -f $SessionName
+            $WriteProgressParams['PercentComplete'] = $Index / $JsonSession.Count * 100
+            Write-Progress @WriteProgressParams
 
-        $DotNetSession = [PuTTYSession]::new($SessionName, $JsonSession.FullName)
-
-        if ($JsonSettings.PSObject.Properties['inherits']) {
-            $DotNetSession.Inherits = $JsonSettings.inherits
-            $JsonSettings.PSObject.Properties.Remove('inherits')
-
-            foreach ($InheritedJsonSession in $DotNetSession.Inherits) {
-                Add-PuTTYSessionJsonInherit -Session $DotNetSession -InheritedSessionName $InheritedJsonSession
+            try {
+                $JsonContent = Get-Content -LiteralPath $SessionPath -Raw -ErrorAction Stop
+                $JsonSettings = $JsonContent | ConvertFrom-Json -NoEnumerate -ErrorAction Stop
+            } catch {
+                Write-Error -Message $_
+                continue
             }
-        }
 
-        Merge-PuTTYSettings -Session $DotNetSession -Settings $JsonSettings
-        $null = $DotNetSessions.Add($DotNetSession)
+            $DotNetSession = [PuTTYSession]::new($SessionName, $SessionPath)
+
+            if ($JsonSettings.PSObject.Properties['inherits']) {
+                $DotNetSession.Inherits = $JsonSettings.inherits
+                $JsonSettings.PSObject.Properties.Remove('inherits')
+
+                foreach ($InheritedJsonSession in $DotNetSession.Inherits) {
+                    Add-PuTTYSessionJsonInherit -Session $DotNetSession -InheritedSessionName $InheritedJsonSession
+                }
+            }
+
+            Merge-PuTTYSettings -Session $DotNetSession -Settings $JsonSettings
+            $null = $DotNetSessions.Add($DotNetSession)
+        }
     }
 
     End {
+        Write-Progress @WriteProgressParams -Completed
         return $DotNetSessions
     }
 }
@@ -441,8 +453,8 @@ Function Convert-PuTTYSessionJsonToDotNet {
 Function Export-PuTTYSessionToJson {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory, ValueFromPipeline)]
-        [PuTTYSession]$Session,
+        [Parameter(Mandatory)]
+        [PuTTYSession[]]$Session,
 
         [Parameter(Mandatory)]
         [String]$Path,
@@ -468,13 +480,29 @@ Function Export-PuTTYSessionToJson {
         if (!$Force) {
             $OutFileParams['NoClobber'] = $true
         }
+
+        $WriteProgressParams = @{
+            Activity = 'Exporting PuTTY sessions'
+        }
     }
 
     Process {
-        Write-Verbose -Message ('Exporting session to JSON: {0}' -f $Session.Name)
-        $SessionFile = '{0}.json' -f $Session.Name
-        $SessionPath = Join-Path -Path $SessionDir.FullName -ChildPath $SessionFile
-        $Session.Settings | ConvertTo-Json -Depth 10 -ErrorAction Stop | Out-File -LiteralPath $SessionPath @OutFileParams
+        for ($Index = 0; $Index -lt $Session.Count; $Index++) {
+            $CurrentSession = $Session[$Index]
+            $SessionName = $CurrentSession.Name
+
+            $WriteProgressParams['Status'] = 'Exporting to JSON: {0}' -f $SessionName
+            $WriteProgressParams['PercentComplete'] = $Index / $Session.Count * 100
+            Write-Progress @WriteProgressParams
+
+            $SessionFile = '{0}.json' -f $SessionName
+            $SessionPath = Join-Path -Path $SessionDir.FullName -ChildPath $SessionFile
+            $CurrentSession.Settings | ConvertTo-Json -Depth 10 -ErrorAction Stop | Out-File -LiteralPath $SessionPath @OutFileParams
+        }
+    }
+
+    End {
+        Write-Progress @WriteProgressParams -Completed
     }
 }
 
@@ -520,10 +548,8 @@ Function Import-PuTTYSessionFromJson {
         }
     }
 
-    Write-Verbose -Message ('Found {0} JSON sessions.' -f $JsonSessions.Count)
-
     Write-Debug -Message 'Converting JSON sessions to .NET objects ...'
-    $DotNetSessions = $JsonSessions | Convert-PuTTYSessionJsonToDotNet
+    $DotNetSessions = Convert-PuTTYSessionJsonToDotNet -JsonSession $JsonSessions
 
     return $DotNetSessions
 }
@@ -535,54 +561,65 @@ Function Import-PuTTYSessionFromJson {
 Function Convert-PuTTYSessionRegistryToDotNet {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory, ValueFromPipeline)]
-        [Microsoft.Win32.RegistryKey]$RegSession,
+        [Parameter(Mandatory)]
+        [Microsoft.Win32.RegistryKey[]]$RegSession,
 
         [Switch]$ExcludeDefault
     )
 
     Begin {
         $DotNetSessions = [Collections.ArrayList]::new()
+
+        $WriteProgressParams = @{
+            Activity = 'Importing PuTTY sessions'
+        }
     }
 
     Process {
-        $SessionName = ConvertFrom-PuTTYEscapedRegistrySessionKey -SessionName $RegSession.PSChildName
-        Write-Verbose -Message ('Importing registry session: {0}' -f $SessionName)
+        for ($Index = 0; $Index -lt $RegSession.Count; $Index++) {
+            $CurrentSession = $RegSession[$Index]
+            $SessionName = ConvertFrom-PuTTYEscapedRegistrySessionKey -SessionName $CurrentSession.PSChildName
 
-        $RegSettings = $RegSession.GetValueNames()
-        if ($RegSettings.Count -eq 0) {
-            Write-Warning -Message ('[{0}] Skipping registry session with no settings.' -f $SessionName)
-            continue
-        }
+            $WriteProgressParams['Status'] = 'Importing from registry: {0}' -f $SessionName
+            $WriteProgressParams['PercentComplete'] = $Index / $RegSession.Count * 100
+            Write-Progress @WriteProgressParams
 
-        $DotNetSession = [PuTTYSession]::new($SessionName, $RegSession.Name.Replace('HKEY_CURRENT_USER\', 'HKCU:\'))
-
-        foreach ($RegSetting in ($RegSession.GetValueNames() | Sort-Object)) {
-            if ($CfgData.Registry.ContainsKey($RegSetting)) {
-                $SettingData = $CfgData.Registry[$RegSetting]
-            } else {
-                if ($RegSetting -notin $RegIgnoredSettings) {
-                    Write-Warning -Message ('[{0}] Ignoring unknown registry setting: {1}' -f $SessionName, $RegSetting)
-                }
+            $RegSettings = $CurrentSession.GetValueNames()
+            if ($RegSettings.Count -eq 0) {
+                Write-Warning -Message ('[{0}] Skipping registry session with no settings.' -f $SessionName)
                 continue
             }
 
-            $DotNetSettingValue = Convert-PuTTYSettingRegistryToDotNet -RegSession $PSItem -SettingData $SettingData -ExcludeDefault:$ExcludeDefault
-            if ($null -ne $DotNetSettingValue) {
-                Add-PuTTYSetting -Session $DotNetSession -SettingData $SettingData -Value $DotNetSettingValue
+            $DotNetSession = [PuTTYSession]::new($SessionName, $CurrentSession.Name.Replace('HKEY_CURRENT_USER\', 'HKCU:\'))
+
+            foreach ($RegSetting in ($CurrentSession.GetValueNames() | Sort-Object)) {
+                if ($CfgData.Registry.ContainsKey($RegSetting)) {
+                    $SettingData = $CfgData.Registry[$RegSetting]
+                } else {
+                    if ($RegSetting -notin $RegIgnoredSettings) {
+                        Write-Warning -Message ('[{0}] Ignoring unknown registry setting: {1}' -f $SessionName, $RegSetting)
+                    }
+                    continue
+                }
+
+                $DotNetSettingValue = Convert-PuTTYSettingRegistryToDotNet -RegSession $CurrentSession -SettingData $SettingData -ExcludeDefault:$ExcludeDefault
+                if ($null -ne $DotNetSettingValue) {
+                    Add-PuTTYSetting -Session $DotNetSession -SettingData $SettingData -Value $DotNetSettingValue
+                }
             }
+
+            # The default .NET types used for values retrieved from the registry can differ from those
+            # used for deserialized JSON (e.g. Int32 for registry DWord versus Int64 for JSON integer).
+            # Perform a roundtrip (de)serialisation to JSON to ensure consistency among all .NET types.
+            $JsonSettings = $DotNetSession.Settings | ConvertTo-Json -Depth 10 -ErrorAction Stop
+            $DotNetSession.Settings = $JsonSettings | ConvertFrom-Json -NoEnumerate -ErrorAction Stop
+
+            $null = $DotNetSessions.Add($DotNetSession)
         }
-
-        # The default .NET types used for values retrieved from the registry can differ from those
-        # used for deserialized JSON (e.g. Int32 for registry DWord versus Int64 for JSON integer).
-        # Perform a roundtrip (de)serialisation to JSON to ensure consistency among all .NET types.
-        $JsonSettings = $DotNetSession.Settings | ConvertTo-Json -Depth 10 -ErrorAction Stop
-        $DotNetSession.Settings = $JsonSettings | ConvertFrom-Json -NoEnumerate -ErrorAction Stop
-
-        $null = $DotNetSessions.Add($DotNetSession)
     }
 
     End {
+        Write-Progress @WriteProgressParams -Completed
         return $DotNetSessions
     }
 }
@@ -733,8 +770,8 @@ Function Convert-PuTTYSettingsDotNetToRegistry {
 Function Export-PuTTYSessionToRegistry {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory, ValueFromPipeline)]
-        [PuTTYSession]$Session,
+        [Parameter(Mandatory)]
+        [PuTTYSession[]]$Session,
 
         [Parameter(Mandatory)]
         [String]$Defaults,
@@ -756,19 +793,34 @@ Function Export-PuTTYSessionToRegistry {
         } catch {
             throw $_
         }
+
+        $WriteProgressParams = @{
+            Activity = 'Exporting PuTTY sessions'
+        }
     }
 
     Process {
-        Write-Verbose -Message ('Exporting session to registry: {0}' -f $Session.Name)
+        for ($Index = 0; $Index -lt $Session.Count; $Index++) {
+            $CurrentSession = $Session[$Index]
+            $SessionName = $CurrentSession.Name
 
-        $RegSession = [PuTTYSession]::new($Session.Name, $Session.Origin)
-        Merge-PuTTYSettings -Session $RegSession -Settings $DefaultSettings.Settings
-        Merge-PuTTYSettings -Session $RegSession -Settings $Session.Settings
+            $WriteProgressParams['Status'] = 'Exporting to registry: {0}' -f $SessionName
+            $WriteProgressParams['PercentComplete'] = $Index / $Session.Count * 100
+            Write-Progress @WriteProgressParams
 
-        $RegSettings = @{ }
-        Convert-PuTTYSettingsDotNetToRegistry -Session $RegSession -RegSettings $RegSettings
+            $RegSession = [PuTTYSession]::new($SessionName, $CurrentSession.Origin)
+            Merge-PuTTYSettings -Session $RegSession -Settings $DefaultSettings.Settings
+            Merge-PuTTYSettings -Session $RegSession -Settings $CurrentSession.Settings
 
-        Set-PuTTYSessionRegistry -Session $RegSession -RegSettings $RegSettings
+            $RegSettings = @{ }
+            Convert-PuTTYSettingsDotNetToRegistry -Session $RegSession -RegSettings $RegSettings
+
+            Set-PuTTYSessionRegistry -Session $RegSession -RegSettings $RegSettings
+        }
+    }
+
+    End {
+        Write-Progress @WriteProgressParams -Completed
     }
 }
 
@@ -802,10 +854,8 @@ Function Import-PuTTYSessionFromRegistry {
         }
     }
 
-    Write-Verbose -Message ('Found {0} registry sessions.' -f $RegSessions.Count)
-
     Write-Debug -Message 'Converting registry sessions to .NET objects ...'
-    $DotNetSessions = $RegSessions | Convert-PuTTYSessionRegistryToDotNet -ExcludeDefault:$ExcludeDefault
+    $DotNetSessions = Convert-PuTTYSessionRegistryToDotNet -RegSession $RegSessions -ExcludeDefault:$ExcludeDefault
 
     return $DotNetSessions
 }
