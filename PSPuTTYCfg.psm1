@@ -213,7 +213,7 @@ Function Import-PuTTYSession {
     Begin {
         Initialize-PuTTYCfg
 
-        $ImportParams = @{ }
+        $ImportParams = @{}
         if ($Filter) {
             $ImportParams['Filter'] = $Filter
         }
@@ -243,7 +243,7 @@ Function Initialize-PuTTYCfg {
     Write-Debug -Message ('Loaded {0} PuTTY settings.' -f $Data.settings.Count)
 
     Write-Debug -Message 'Building JSON to Registry setting hashtable ...'
-    $JsonSettings = @{ }
+    $JsonSettings = @{}
     foreach ($Setting in $Data.settings) {
         $SettingKey = '{0}/{1}' -f $Setting.json.path, $Setting.json.name
         $JsonSettings[$SettingKey] = $Setting
@@ -251,7 +251,7 @@ Function Initialize-PuTTYCfg {
     $Script:CfgData.Json = $JsonSettings
 
     Write-Debug -Message 'Building Registry to JSON setting hashtable ...'
-    $RegistrySettings = @{ }
+    $RegistrySettings = @{}
     foreach ($Setting in $Data.settings) {
         $SettingKey = $Setting.reg.name
         $RegistrySettings[$SettingKey] = $Setting
@@ -293,7 +293,7 @@ Function Add-PuTTYSetting {
                 throw ('[{0}] Unexpected type at path "{1}" of settings object: {2}' -f $Session.Name, $CurrentPath, $PathProperty.GetType().Name)
             }
         } else {
-            $Settings | Add-Member -NotePropertyName $PathElement -NotePropertyValue ([PSCustomObject]@{ })
+            $Settings | Add-Member -NotePropertyName $PathElement -NotePropertyValue ([PSCustomObject]@{})
         }
 
         $Settings = $Settings.$PathElement
@@ -812,7 +812,7 @@ Function Export-PuTTYSessionToRegistry {
             Merge-PuTTYSettings -Session $RegSession -Settings $DefaultSettings.Settings
             Merge-PuTTYSettings -Session $RegSession -Settings $CurrentSession.Settings
 
-            $RegSettings = @{ }
+            $RegSettings = @{}
             Convert-PuTTYSettingsDotNetToRegistry -Session $RegSession -RegSettings $RegSettings
 
             Set-PuTTYSessionRegistry -Session $RegSession -RegSettings $RegSettings
