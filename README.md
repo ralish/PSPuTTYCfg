@@ -1,5 +1,5 @@
 PSPuTTYCfg
-===========
+==========
 
 [![pwsh ver](https://img.shields.io/powershellgallery/v/PSPuTTYCfg)](https://www.powershellgallery.com/packages/PSPuTTYCfg)
 [![pwsh dl](https://img.shields.io/powershellgallery/dt/PSPuTTYCfg)](https://www.powershellgallery.com/packages/PSPuTTYCfg)
