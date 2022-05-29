@@ -714,6 +714,22 @@
                 "default": 0
             }
         },
+        {
+            "enum": {
+                "off": 1,
+                "on": 2
+            },
+            "json": {
+                "name": "waitForServerGreeting",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugDropStart",
+                "type": "DWord",
+                "default": 1
+            }
+        },
         // Connection -> SSH -> Cipher
         {
             "json": {
@@ -1754,6 +1770,22 @@
             },
             "reg": {
                 "name": "LinuxFunctionKeys",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "ctrlTogglesAppMode": 0,
+                "xtermStyleBitmap": 1
+            },
+            "json": {
+                "name": "arrowKeysModifiers",
+                "path": "/terminal/keyboard",
+                "type": "string"
+            },
+            "reg": {
+                "name": "ShiftedArrowKeys",
                 "type": "DWord",
                 "default": 0
             }

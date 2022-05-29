@@ -97,7 +97,7 @@ Function Export-PuTTYSession {
         .PARAMETER Defaults
         The baseline defaults to use for unspecified settings when exporting to the Windows registry.
 
-        The default is the PuTTY v0.76 defaults, however, earlier PuTTY versions are also supported.
+        The default is the PuTTY v0.77 defaults, however, earlier PuTTY versions are also supported.
 
         .PARAMETER Force
         Permit overwriting of existing PuTTY sessions.
@@ -128,8 +128,8 @@ Function Export-PuTTYSession {
         [Switch]$Registry,
 
         [Parameter(ParameterSetName = 'Registry')]
-        [ValidateSet('0.70', '0.71', '0.72', '0.73', '0.74', '0.75', '0.76')]
-        [String]$Defaults = '0.76',
+        [ValidateSet('0.70', '0.71', '0.72', '0.73', '0.74', '0.75', '0.76', '0.77')]
+        [String]$Defaults = '0.77',
 
         [Switch]$Force
     )
@@ -174,7 +174,7 @@ Function Import-PuTTYSession {
         .PARAMETER ExcludeDefault
         Exclude settings which match PuTTY's defaults when importing (i.e. only import customised settings).
 
-        Currently this switch only supports using the defaults from PuTTY v0.76.
+        Currently this switch only supports using the defaults from PuTTY v0.77.
 
         .PARAMETER Filter
         Only import sessions where the session name matches the provided glob pattern.
