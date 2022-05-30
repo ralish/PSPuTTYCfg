@@ -136,11 +136,11 @@ Function Export-PuTTYSession {
 
     Begin {
         Initialize-PuTTYCfg
-        $Sessions = [Collections.ArrayList]::new()
+        $Sessions = [Collections.Generic.List[PuTTYSession]]::new()
     }
 
     Process {
-        $null = $Sessions.Add($Session)
+        $Sessions.Add($Session)
     }
 
     End {
@@ -362,8 +362,12 @@ Function Add-PuTTYSessionJsonInherit {
         [Parameter(Mandatory)]
         [String]$InheritedSessionName,
 
-        [Collections.ArrayList]$ProcessedSessions = [Collections.ArrayList]::new()
+        [Collections.Generic.List[PuTTYSession]]$ProcessedSessions
     )
+
+    if (!$ProcessedSessions) {
+        $ProcessedSessions = [Collections.Generic.List[PuTTYSession]]::new()
+    }
 
     Write-Debug -Message ('[{0}] Processing inherited JSON session: {1}' -f $Session.Name, $InheritedSessionName)
 
@@ -380,7 +384,7 @@ Function Add-PuTTYSessionJsonInherit {
         throw $_
     }
 
-    $null = $ProcessedSessions.Add($InheritedSessionName)
+    $ProcessedSessions.Add($InheritedSessionName)
 
     if ($InheritedJsonSettings.PSObject.Properties['inherits']) {
         $InheritedJsonSessions = $InheritedJsonSettings.inherits
@@ -403,7 +407,7 @@ Function Convert-PuTTYSessionJsonToDotNet {
     )
 
     Begin {
-        $DotNetSessions = [Collections.ArrayList]::new()
+        $DotNetSessions = [Collections.Generic.List[PuTTYSession]]::new()
 
         $WriteProgressParams = @{
             Activity = 'Importing PuTTY sessions'
@@ -440,7 +444,7 @@ Function Convert-PuTTYSessionJsonToDotNet {
             }
 
             Merge-PuTTYSettings -Session $DotNetSession -Settings $JsonSettings
-            $null = $DotNetSessions.Add($DotNetSession)
+            $DotNetSessions.Add($DotNetSession)
         }
     }
 
@@ -568,7 +572,7 @@ Function Convert-PuTTYSessionRegistryToDotNet {
     )
 
     Begin {
-        $DotNetSessions = [Collections.ArrayList]::new()
+        $DotNetSessions = [Collections.Generic.List[PuTTYSession]]::new()
 
         $WriteProgressParams = @{
             Activity = 'Importing PuTTY sessions'
@@ -614,7 +618,7 @@ Function Convert-PuTTYSessionRegistryToDotNet {
             $JsonSettings = $DotNetSession.Settings | ConvertTo-Json -Depth 10 -ErrorAction Stop
             $DotNetSession.Settings = $JsonSettings | ConvertFrom-Json -NoEnumerate -ErrorAction Stop
 
-            $null = $DotNetSessions.Add($DotNetSession)
+            $DotNetSessions.Add($DotNetSession)
         }
     }
 
