@@ -612,9 +612,11 @@ Function Convert-PuTTYSessionRegistryToDotNet {
                 }
             }
 
-            # The default .NET types used for values retrieved from the registry can differ from those
-            # used for deserialized JSON (e.g. Int32 for registry DWord versus Int64 for JSON integer).
-            # Perform a roundtrip (de)serialisation to JSON to ensure consistency among all .NET types.
+            # The default .NET types used for values retrieved from the
+            # registry can differ from those used for deserialized JSON (e.g.
+            # Int32 for registry DWord versus Int64 for JSON integer). Perform
+            # a roundtrip (de)serialisation to JSON to ensure consistency among
+            # all .NET types.
             $JsonSettings = $DotNetSession.Settings | ConvertTo-Json -Depth 10 -ErrorAction Stop
             $DotNetSession.Settings = $JsonSettings | ConvertFrom-Json -NoEnumerate -ErrorAction Stop
 
