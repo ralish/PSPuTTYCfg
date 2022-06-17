@@ -117,6 +117,7 @@ Function Export-PuTTYSession {
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'Json')]
+    [OutputType([Void], [Object[]])]
     Param(
         [Parameter(Mandatory, ValueFromPipeline)]
         [PuTTYSession]$Session,
@@ -194,6 +195,7 @@ Function Import-PuTTYSession {
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'Json')]
+    [OutputType([Void], [Object[]])]
     Param(
         [Parameter(ParameterSetName = 'Json', Mandatory)]
         [String]$Path,
@@ -230,6 +232,7 @@ Function Import-PuTTYSession {
 
 Function Initialize-PuTTYCfg {
     [CmdletBinding()]
+    [OutputType([Void])]
     Param()
 
     if ($Initialized) {
@@ -265,6 +268,7 @@ Function Initialize-PuTTYCfg {
 
 Function Add-PuTTYSetting {
     [CmdletBinding()]
+    [OutputType([Void])]
     Param(
         [Parameter(Mandatory)]
         [PuTTYSession]$Session,
@@ -305,6 +309,7 @@ Function Add-PuTTYSetting {
 Function Merge-PuTTYSettings {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
     [CmdletBinding()]
+    [OutputType([Void])]
     Param(
         [Parameter(Mandatory)]
         [PuTTYSession]$Session,
@@ -355,6 +360,7 @@ Function Merge-PuTTYSettings {
 
 Function Add-PuTTYSessionJsonInherit {
     [Cmdletbinding()]
+    [OutputType([Void])]
     Param(
         [Parameter(Mandatory)]
         [PuTTYSession]$Session,
@@ -401,6 +407,7 @@ Function Add-PuTTYSessionJsonInherit {
 
 Function Convert-PuTTYSessionJsonToDotNet {
     [CmdletBinding()]
+    [OutputType([Object[]])]
     Param(
         [Parameter(Mandatory)]
         [IO.FileInfo[]]$JsonSession
@@ -450,12 +457,13 @@ Function Convert-PuTTYSessionJsonToDotNet {
 
     End {
         Write-Progress @WriteProgressParams -Completed
-        return $DotNetSessions
+        return , $DotNetSessions
     }
 }
 
 Function Export-PuTTYSessionToJson {
     [CmdletBinding()]
+    [OutputType([Void])]
     Param(
         [Parameter(Mandatory)]
         [PuTTYSession[]]$Session,
@@ -512,6 +520,7 @@ Function Export-PuTTYSessionToJson {
 
 Function Import-PuTTYSessionFromJson {
     [CmdletBinding()]
+    [OutputType([Void], [Object[]])]
     Param(
         [Parameter(Mandatory)]
         [String]$Path,
@@ -555,7 +564,7 @@ Function Import-PuTTYSessionFromJson {
     Write-Debug -Message 'Converting JSON sessions to .NET objects ...'
     $DotNetSessions = Convert-PuTTYSessionJsonToDotNet -JsonSession $JsonSessions
 
-    return $DotNetSessions
+    return $DotNetSessions.ToArray()
 }
 
 #endregion
@@ -564,6 +573,7 @@ Function Import-PuTTYSessionFromJson {
 
 Function Convert-PuTTYSessionRegistryToDotNet {
     [CmdletBinding()]
+    [OutputType([Object[]])]
     Param(
         [Parameter(Mandatory)]
         [Microsoft.Win32.RegistryKey[]]$RegSession,
@@ -626,12 +636,13 @@ Function Convert-PuTTYSessionRegistryToDotNet {
 
     End {
         Write-Progress @WriteProgressParams -Completed
-        return $DotNetSessions
+        return , $DotNetSessions
     }
 }
 
 Function Convert-PuTTYSettingRegistryToDotNet {
     [CmdletBinding()]
+    [OutputType([Void], [Bool], [Int], [String], [Object[]])]
     Param(
         [Parameter(Mandatory)]
         [Microsoft.Win32.RegistryKey]$RegSession,
@@ -709,11 +720,12 @@ Function Convert-PuTTYSettingRegistryToDotNet {
         Default { throw ('Unexpected registry type: {0}' -f $RegSettingType) }
     }
 
-    return $null
+    return
 }
 
 Function Convert-PuTTYSettingsDotNetToRegistry {
     [CmdletBinding()]
+    [OutputType([Void])]
     Param(
         [Parameter(Mandatory)]
         [PuTTYSession]$Session,
@@ -775,6 +787,7 @@ Function Convert-PuTTYSettingsDotNetToRegistry {
 
 Function Export-PuTTYSessionToRegistry {
     [CmdletBinding()]
+    [OutputType([Void])]
     Param(
         [Parameter(Mandatory)]
         [PuTTYSession[]]$Session,
@@ -832,6 +845,7 @@ Function Export-PuTTYSessionToRegistry {
 
 Function Import-PuTTYSessionFromRegistry {
     [CmdletBinding()]
+    [OutputType([Void], [Object[]])]
     Param(
         [Switch]$ExcludeDefault,
         [String]$Filter
@@ -863,12 +877,13 @@ Function Import-PuTTYSessionFromRegistry {
     Write-Debug -Message 'Converting registry sessions to .NET objects ...'
     $DotNetSessions = Convert-PuTTYSessionRegistryToDotNet -RegSession $RegSessions -ExcludeDefault:$ExcludeDefault
 
-    return $DotNetSessions
+    return $DotNetSessions.ToArray()
 }
 
 Function Set-PuTTYSessionRegistry {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')]
     [CmdletBinding()]
+    [OutputType([Void])]
     Param(
         [Parameter(Mandatory)]
         [PuTTYSession]$Session,
@@ -905,6 +920,7 @@ Function Set-PuTTYSessionRegistry {
 # void unescape_registry_key(const char *in, strbuf *out)
 Function ConvertFrom-PuTTYEscapedRegistrySessionKey {
     [CmdletBinding()]
+    [OutputType([String])]
     Param(
         [Parameter(Mandatory)]
         [String]$SessionName
@@ -929,6 +945,7 @@ Function ConvertFrom-PuTTYEscapedRegistrySessionKey {
 # void escape_registry_key(const char *in, strbuf *out)
 Function ConvertTo-PuTTYEscapedRegistrySessionKey {
     [CmdletBinding()]
+    [OutputType([String])]
     Param(
         [Parameter(Mandatory)]
         [String]$SessionName
@@ -952,6 +969,7 @@ Function ConvertTo-PuTTYEscapedRegistrySessionKey {
 
 Function Find-EnumName {
     [CmdletBinding()]
+    [OutputType([String])]
     Param(
         [Parameter(Mandatory)]
         [PSCustomObject]$Enum,
