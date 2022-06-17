@@ -9,14 +9,14 @@ $CfgData = [PSCustomObject]@{
 }
 
 # Module constants
-Set-Variable -Option ReadOnly -Scope Script -Name JsonSchemaUri -Value 'https://raw.githubusercontent.com/ralish/PSPuTTYCfg/stable/schemas/session.jsonc'
+Set-Variable -Option ReadOnly -Scope Script -Name 'JsonSchemaUri' -Value 'https://raw.githubusercontent.com/ralish/PSPuTTYCfg/stable/schemas/session.jsonc'
 
 # JSON session constants
-Set-Variable -Option ReadOnly -Scope Script -Name JsonValidExts -Value @('.json', '.json')
+Set-Variable -Option ReadOnly -Scope Script -Name 'JsonValidExts' -Value @('.json', '.json')
 
 # Registry session constants
-Set-Variable -Option ReadOnly -Scope Script -Name RegSessionsPath -Value 'HKCU:\SOFTWARE\SimonTatham\PuTTY\Sessions'
-Set-Variable -Option ReadOnly -Scope Script -Name RegIgnoredSettings -Value @(
+Set-Variable -Option ReadOnly -Scope Script -Name 'RegSessionsPath' -Value 'HKCU:\SOFTWARE\SimonTatham\PuTTY\Sessions'
+Set-Variable -Option ReadOnly -Scope Script -Name 'RegIgnoredSettings' -Value @(
     'BoldFont'
     'BoldFontCharSet'
     'BoldFontHeight'
