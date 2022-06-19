@@ -117,7 +117,7 @@ Function Export-PuTTYSession {
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'Json')]
-    [OutputType([Void], [Object[]])]
+    [OutputType([Void], [PSCustomObject[]])]
     Param(
         [Parameter(Mandatory, ValueFromPipeline)]
         [PuTTYSession]$Session,
@@ -148,7 +148,7 @@ Function Export-PuTTYSession {
         switch ($PSCmdlet.ParameterSetName) {
             'Json' { Export-PuTTYSessionToJson -Session $Sessions -Path $Path -Force:$Force }
             'Registry' { Export-PuTTYSessionToRegistry -Session $Sessions -Defaults $Defaults -Force:$Force }
-            Default { throw ('Unknown provider: {0}' -f $PSCmdlet.ParameterSetName) }
+            Default { throw 'Unknown provider: {0}' -f $PSCmdlet.ParameterSetName }
         }
     }
 }
@@ -195,7 +195,7 @@ Function Import-PuTTYSession {
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'Json')]
-    [OutputType([Void], [Object[]])]
+    [OutputType([Void], [PSCustomObject[]])]
     Param(
         [Parameter(ParameterSetName = 'Json', Mandatory)]
         [String]$Path,
@@ -225,7 +225,7 @@ Function Import-PuTTYSession {
         switch ($PSCmdlet.ParameterSetName) {
             'Json' { Import-PuTTYSessionFromJson -Path $Path -Recurse:$Recurse @ImportParams }
             'Registry' { Import-PuTTYSessionFromRegistry -ExcludeDefault:$ExcludeDefault @ImportParams }
-            Default { throw ('Unknown provider: {0}' -f $PSCmdlet.ParameterSetName) }
+            Default { throw 'Unknown provider: {0}' -f $PSCmdlet.ParameterSetName }
         }
     }
 }
@@ -294,7 +294,7 @@ Function Add-PuTTYSetting {
             $PathProperty = $Settings.$PathElement
 
             if ($PathProperty -isnot [PSCustomObject]) {
-                throw ('[{0}] Unexpected type at path "{1}" of settings object: {2}' -f $Session.Name, $CurrentPath, $PathProperty.GetType().Name)
+                throw '[{0}] Unexpected type at path "{1}" of settings object: {2}' -f $Session.Name, $CurrentPath, $PathProperty.GetType().Name
             }
         } else {
             $Settings | Add-Member -NotePropertyName $PathElement -NotePropertyValue ([PSCustomObject]@{})
@@ -322,7 +322,7 @@ Function Merge-PuTTYSettings {
 
     foreach ($Property in $Settings.PSObject.Properties) {
         if ($Property.MemberType -ne 'NoteProperty') {
-            throw ('[{0}] Unexpected member type at path "{1}" of settings object: {2}' -f $Session.Name, $CurrentPath, $Property.MemberType)
+            throw '[{0}] Unexpected member type at path "{1}" of settings object: {2}' -f $Session.Name, $CurrentPath, $Property.MemberType
         }
 
         $SettingName = $Property.Name
@@ -378,7 +378,7 @@ Function Add-PuTTYSessionJsonInherit {
     Write-Debug -Message ('[{0}] Processing inherited JSON session: {1}' -f $Session.Name, $InheritedSessionName)
 
     if ($Session.Name -eq $InheritedSessionName -or $ProcessedSessions -contains $InheritedSessionName) {
-        throw ('Circular inheritance detected processing inherited session "{0}" specified by session: {1}' -f $InheritedSessionName, $Session.Name)
+        throw 'Circular inheritance detected processing inherited session "{0}" specified by session: {1}' -f $InheritedSessionName, $Session.Name
     }
 
     $InheritedSessionPath = Join-Path -Path (Split-Path -Path $Session.Origin -Parent) -ChildPath ('{0}.json' -f $InheritedSessionName)
@@ -482,7 +482,7 @@ Function Export-PuTTYSessionToJson {
         }
 
         if ($SessionDir -isnot [IO.DirectoryInfo]) {
-            throw ('Expected a directory path but received: {0}' -f $SessionDir.GetType().Name)
+            throw 'Expected a directory path but received: {0}' -f $SessionDir.GetType().Name
         }
 
         $OutFileParams = @{
@@ -520,7 +520,7 @@ Function Export-PuTTYSessionToJson {
 
 Function Import-PuTTYSessionFromJson {
     [CmdletBinding()]
-    [OutputType([Void], [Object[]])]
+    [OutputType([Void], [PSCustomObject[]])]
     Param(
         [Parameter(Mandatory)]
         [String]$Path,
@@ -539,17 +539,17 @@ Function Import-PuTTYSessionFromJson {
         if ($SessionPath.Extension -In $JsonValidExts) {
             $JsonSessions = @($SessionPath)
         } else {
-            throw ('Provided path is not a JSON file: {0}' -f $Path)
+            throw 'Provided path is not a JSON file: {0}' -f $Path
         }
     } elseif ($SessionPath -is [IO.DirectoryInfo]) {
         Write-Debug -Message ('Enumerating JSON sessions at path: {0}' -f $Path)
         $JsonSessions = Get-ChildItem -Path $Path -File -Recurse:$Recurse | Where-Object Extension -In $JsonValidExts
 
         if ($JsonSessions.Count -eq 0) {
-            throw ('No JSON sessions found at path: {0}' -f $Path)
+            throw 'No JSON sessions found at path: {0}' -f $Path
         }
     } else {
-        throw ('Expected a filesystem path but received: {0}' -f $SessionPath.GetType().Name)
+        throw 'Expected a filesystem path but received: {0}' -f $SessionPath.GetType().Name
     }
 
     if ($Filter) {
@@ -642,7 +642,7 @@ Function Convert-PuTTYSessionRegistryToDotNet {
 
 Function Convert-PuTTYSettingRegistryToDotNet {
     [CmdletBinding()]
-    [OutputType([Void], [Bool], [Int], [String], [Object[]])]
+    [OutputType([Void], [Boolean], [Int], [String], [Object[]])]
     Param(
         [Parameter(Mandatory)]
         [Microsoft.Win32.RegistryKey]$RegSession,
@@ -677,12 +677,12 @@ Function Convert-PuTTYSettingRegistryToDotNet {
                     if (!$SettingIsEnumType) { return $RegSettingValue }
 
                     $EnumName = Find-EnumName -Enum $SettingData.enum -Value $RegSettingValue
-                    if ($EnumName) { return [int]$EnumName }
+                    if ($EnumName) { return [Int]$EnumName }
                     Write-Error -Message ('[{0}] Registry setting {1} has unknown enumeration value: {2}' -f $SessionName, $RegSettingName, $RegSettingValue)
                 }
 
                 'boolean' {
-                    if ($RegSettingValue -eq 0 -or $RegSettingValue -eq 1) { return [bool]$RegSettingValue }
+                    if ($RegSettingValue -eq 0 -or $RegSettingValue -eq 1) { return [Boolean]$RegSettingValue }
                     Write-Error -Message ('[{0}] Registry setting {1} has invalid value for boolean type: {2}' -f $SessionName, $RegSettingName, $RegSettingValue)
                 }
 
@@ -692,7 +692,7 @@ Function Convert-PuTTYSettingRegistryToDotNet {
                     Write-Error -Message ('[{0}] Registry setting {1} has unknown enumeration value: {2}' -f $SessionName, $RegSettingName, $RegSettingValue)
                 }
 
-                Default { throw ('Unexpected JSON type: {0}' -f $JsonSettingType) }
+                Default { throw 'Unexpected JSON type: {0}' -f $JsonSettingType }
             }
         }
 
@@ -713,11 +713,11 @@ Function Convert-PuTTYSettingRegistryToDotNet {
                     Write-Error -Message ('[{0}] Registry setting {1} has unknown enumeration value: {2}' -f $SessionName, $RegSettingName, $RegSettingValue)
                 }
 
-                Default { throw ('Unexpected JSON type: {0}' -f $JsonSettingType) }
+                Default { throw 'Unexpected JSON type: {0}' -f $JsonSettingType }
             }
         }
 
-        Default { throw ('Unexpected registry type: {0}' -f $RegSettingType) }
+        Default { throw 'Unexpected registry type: {0}' -f $RegSettingType }
     }
 
     return
@@ -743,7 +743,7 @@ Function Convert-PuTTYSettingsDotNetToRegistry {
 
     foreach ($Property in $Settings.PSObject.Properties) {
         if ($Property.MemberType -ne 'NoteProperty') {
-            throw ('[{0}] Unexpected member type at path "{1}" of settings object: {2}' -f $Session.Name, $CurrentPath, $Property.MemberType)
+            throw '[{0}] Unexpected member type at path "{1}" of settings object: {2}' -f $Session.Name, $CurrentPath, $Property.MemberType
         }
 
         $SettingName = $Property.Name
@@ -845,7 +845,7 @@ Function Export-PuTTYSessionToRegistry {
 
 Function Import-PuTTYSessionFromRegistry {
     [CmdletBinding()]
-    [OutputType([Void], [Object[]])]
+    [OutputType([Void], [PSCustomObject[]])]
     Param(
         [Switch]$ExcludeDefault,
         [String]$Filter
