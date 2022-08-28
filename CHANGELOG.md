@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.2.8
+------
+
+- Minor code clean-up & developer tooling improvements
+
 v0.2.7
 ------
 
