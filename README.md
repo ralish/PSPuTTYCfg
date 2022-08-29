@@ -7,10 +7,47 @@ PSPuTTYCfg
 
 A PowerShell module to manage PuTTY sessions on Windows platforms as JSON configurations.
 
-- [Usage](#usage)
 - [Requirements](#requirements)
 - [Installing](#installing)
+- [Usage](#usage)
 - [License](#license)
+
+Requirements
+------------
+
+- PowerShell 5.0 (or later)
+
+PuTTY is not required to use the module, but it's unlikely to be of much use without it ...
+
+Installing
+----------
+
+### PowerShellGet (included with PowerShell 5.0)
+
+The module is published to the [PowerShell Gallery](https://www.powershellgallery.com/packages/PSPuTTYCfg):
+
+```posh
+Install-Module -Name PSPuTTYCfg
+```
+
+### ZIP File
+
+Download the [ZIP file](https://github.com/ralish/PSPuTTYCfg/archive/stable.zip) of the latest release and unpack it to one of the following locations:
+
+- Current user: `C:\Users\<your.account>\Documents\WindowsPowerShell\Modules\PSPuTTYCfg`
+- All users: `C:\Program Files\WindowsPowerShell\Modules\PSPuTTYCfg`
+
+### Git Clone
+
+You can also clone the repository into one of the above locations if you'd like the ability to easily update it via Git.
+
+### Did it work?
+
+You can check that PowerShell is able to locate the module by running the following at a PowerShell prompt:
+
+```posh
+Get-Module PSPuTTYCfg -ListAvailable
+```
 
 Usage
 -----
@@ -85,43 +122,6 @@ Finally, import this JSON configuration and export it to the Windows registry so
 Open PuTTY to see your new configuration which will be using the same settings as the *Defaults* configuration (minus those we've overridden).
 
 Multiple inheritance is supported (a single session specifying multiple inherited configurations), as well as recursive resolution of inherited sessions (inherited sessions which themselves inherit sessions). Settings are applied from inherited sessions in the order in which they are processed, with inherited sessions listed earlier having lower precedence than those specified later. Circular inheritance is not supported and will throw an error when detected during session import.
-
-Requirements
-------------
-
-- PowerShell 5.0 (or later)
-
-PuTTY is not required to use the module, but it's unlikely to be of much use without it ...
-
-Installing
-----------
-
-### PowerShellGet (included with PowerShell 5.0)
-
-The module is published to the [PowerShell Gallery](https://www.powershellgallery.com/packages/PSPuTTYCfg):
-
-```posh
-Install-Module -Name PSPuTTYCfg
-```
-
-### ZIP File
-
-Download the [ZIP file](https://github.com/ralish/PSPuTTYCfg/archive/stable.zip) of the latest release and unpack it to one of the following locations:
-
-- Current user: `C:\Users\<your.account>\Documents\WindowsPowerShell\Modules\PSPuTTYCfg`
-- All users: `C:\Program Files\WindowsPowerShell\Modules\PSPuTTYCfg`
-
-### Git Clone
-
-You can also clone the repository into one of the above locations if you'd like the ability to easily update it via Git.
-
-### Did it work?
-
-You can check that PowerShell is able to locate the module by running the following at a PowerShell prompt:
-
-```posh
-Get-Module PSPuTTYCfg -ListAvailable
-```
 
 License
 -------
