@@ -368,11 +368,11 @@ Function Add-PuTTYSessionJsonInherit {
         [Parameter(Mandatory)]
         [String]$InheritedSessionName,
 
-        [Collections.Generic.List[PuTTYSession]]$ProcessedSessions
+        [Collections.Generic.List[String]]$ProcessedSessions
     )
 
     if (!$ProcessedSessions) {
-        $ProcessedSessions = [Collections.Generic.List[PuTTYSession]]::new()
+        $ProcessedSessions = [Collections.Generic.List[String]]::new()
     }
 
     Write-Debug -Message ('[{0}] Processing inherited JSON session: {1}' -f $Session.Name, $InheritedSessionName)
