@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.2.9
+------
+
+- Fix incorrect parameter type when processing inherited sessions
+
 v0.2.8
 ------
 
