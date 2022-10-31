@@ -1,6 +1,6 @@
 Windows Registry Editor Version 5.00
 
-[HKEY_CURRENT_USER\SOFTWARE\SimonTatham\PuTTY\Sessions\Default%20Settings%20-%20v0.72]
+[HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\Default%20Settings%20-%20v0.72]
 "AddressFamily"=dword:00000000
 "AgentFwd"=dword:00000000
 "AltF4"=dword:00000001
