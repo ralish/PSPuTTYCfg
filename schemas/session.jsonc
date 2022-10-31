@@ -564,6 +564,12 @@
                     "$comment": "BugRSAPad2",
                     "$ref": "#/definitions/TypeAutoOnOff",
                     "title": "Requires padding on SSH-2 RSA signatures"
+                },
+                "waitForServerGreeting": {
+                    "$comment": "BugDropStart",
+                    "$ref": "#/definitions/TypeOnOff",
+                    "title": "Discards data sent before its greeting",
+                    "default": "off"
                 }
             }
         },
@@ -1148,6 +1154,16 @@
         "CategoryTerminalKeyboard": {
             "type": "object",
             "properties": {
+                "arrowKeysModifiers": {
+                    "$comment": "ShiftedArrowKeys",
+                    "title": "Shift/Ctrl/Alt with the arrow keys",
+                    "type": "string",
+                    "enum": [
+                        "ctrlTogglesAppMode",
+                        "xtermStyleBitmap"
+                    ],
+                    "default": "ctrlTogglesAppMode"
+                },
                 "backspaceKeyMode": {
                     "$comment": "BackspaceIsDelete",
                     "title": "The Backspace key",
@@ -1888,6 +1904,13 @@
             "type": "integer",
             "minimum": 1,
             "maximum": 65535
+        },
+        "TypeOnOff": {
+            "type": "string",
+            "enum": [
+                "off",
+                "on"
+            ]
         },
         "TypeRgbTuple": {
             "title": "RGB tuple",
