@@ -439,6 +439,16 @@
                     "title": "Private key file for authentication",
                     "type": "string"
                 },
+                "authCertFile": {
+                    "$comment": "DetachedCertificate",
+                    "title": "Certificate to use with the private key",
+                    "type": "string"
+                },
+                "authPluginCommand": {
+                    "$comment": "AuthPlugin",
+                    "title": "Plugin command for authentication responses",
+                    "type": "string"
+                },
                 "authAgent": {
                     "$comment": "TryAgent",
                     "title": "Attempt authentication using Pageant",
@@ -570,6 +580,12 @@
                     "$ref": "#/definitions/TypeOnOff",
                     "title": "Discards data sent before its greeting",
                     "default": "off"
+                },
+                "waitForServerKexinit": {
+                    "$comment": "BugFilterKexinit",
+                    "$ref": "#/definitions/TypeOnOff",
+                    "title": "Chokes on PuTTY's full KEXINIT",
+                    "default": "off"
                 }
             }
         },
@@ -587,7 +603,12 @@
                             "dh-gex-sha1",
                             "dh-group1-sha1",
                             "dh-group14-sha1",
+                            "dh-group15-sha512",
+                            "dh-group16-sha512",
+                            "dh-group17-sha512",
+                            "dh-group18-sha512",
                             "ecdh",
+                            "ntru-curve25519",
                             "rsa",
                             "WARN"
                         ]
@@ -595,8 +616,13 @@
                     "minItems": 1,
                     "uniqueItems": true,
                     "default": [
+                        "ntru-curve25519",
                         "ecdh",
                         "dh-gex-sha1",
+                        "dh-group18-sha512",
+                        "dh-group17-sha512",
+                        "dh-group16-sha512",
+                        "dh-group15-sha512",
                         "dh-group14-sha1",
                         "rsa",
                         "WARN",
@@ -683,6 +709,7 @@
                         "enum": [
                             "3des",
                             "aes",
+                            "aesgcm",
                             "arcfour",
                             "blowfish",
                             "chacha20",
@@ -695,6 +722,7 @@
                     "default": [
                         "aes",
                         "chacha20",
+                        "aesgcm",
                         "3des",
                         "WARN",
                         "des",
