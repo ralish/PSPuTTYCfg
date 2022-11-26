@@ -242,7 +242,7 @@ Function Initialize-PuTTYCfg {
     Write-Debug -Message 'Loading configuration data ...'
     $Path = Join-Path -Path $PSScriptRoot -ChildPath 'PSPuTTYCfg.jsonc'
     $Content = Get-Content -LiteralPath $Path -Raw -ErrorAction Stop
-    $Data = $Content | ConvertFrom-Json -NoEnumerate -ErrorAction Stop
+    $Data = $Content | ConvertFrom-Json -ErrorAction Stop
     Write-Debug -Message ('Loaded {0} PuTTY settings.' -f $Data.settings.Count)
 
     Write-Debug -Message 'Building JSON to Registry setting hashtable ...'
@@ -384,7 +384,7 @@ Function Add-PuTTYSessionJsonInherit {
     $InheritedSessionPath = Join-Path -Path (Split-Path -Path $Session.Origin -Parent) -ChildPath ('{0}.json' -f $InheritedSessionName)
     try {
         $InheritedJsonContent = Get-Content -LiteralPath $InheritedSessionPath -Raw -ErrorAction Stop
-        $InheritedJsonSettings = $InheritedJsonContent | ConvertFrom-Json -NoEnumerate -ErrorAction Stop
+        $InheritedJsonSettings = $InheritedJsonContent | ConvertFrom-Json -ErrorAction Stop
     } catch {
         Write-Warning -Message ('Failed to load inherited session "{0}" specified by session: {1}' -f $InheritedSessionName, $Session.Name)
         throw $_
@@ -433,7 +433,7 @@ Function Convert-PuTTYSessionJsonToDotNet {
 
             try {
                 $JsonContent = Get-Content -LiteralPath $SessionPath -Raw -ErrorAction Stop
-                $JsonSettings = $JsonContent | ConvertFrom-Json -NoEnumerate -ErrorAction Stop
+                $JsonSettings = $JsonContent | ConvertFrom-Json -ErrorAction Stop
             } catch {
                 Write-Error -Message $_
                 continue
@@ -628,7 +628,7 @@ Function Convert-PuTTYSessionRegistryToDotNet {
             # a roundtrip (de)serialisation to JSON to ensure consistency among
             # all .NET types.
             $JsonSettings = $DotNetSession.Settings | ConvertTo-Json -Depth 10 -ErrorAction Stop
-            $DotNetSession.Settings = $JsonSettings | ConvertFrom-Json -NoEnumerate -ErrorAction Stop
+            $DotNetSession.Settings = $JsonSettings | ConvertFrom-Json -ErrorAction Stop
 
             $DotNetSessions.Add($DotNetSession)
         }
