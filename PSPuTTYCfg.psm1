@@ -543,7 +543,7 @@ Function Import-PuTTYSessionFromJson {
         }
     } elseif ($SessionPath -is [IO.DirectoryInfo]) {
         Write-Debug -Message ('Enumerating JSON sessions at path: {0}' -f $Path)
-        $JsonSessions = Get-ChildItem -Path $Path -File -Recurse:$Recurse | Where-Object Extension -In $JsonValidExts
+        $JsonSessions = @(Get-ChildItem -Path $Path -File -Recurse:$Recurse | Where-Object Extension -In $JsonValidExts)
 
         if ($JsonSessions.Count -eq 0) {
             throw 'No JSON sessions found at path: {0}' -f $Path
