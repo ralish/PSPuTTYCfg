@@ -1,6 +1,17 @@
 Changelog
 =========
 
+v0.2.11
+-------
+
+- *PowerShell 5.x compatibility fixes*
+  - Perform JSON indentation ourselves before saving
+  - Don't write a UTF-8 BOM when saving JSON sessions
+  - Remove JSON comments before deserialising
+  - Remove usage of `-NoEnumerate` in `ConvertFrom-Json`
+- Fix handling where import path has no sessions
+- Add additional enum values for `ProxyMethod`
+
 v0.2.10
 -------
 
