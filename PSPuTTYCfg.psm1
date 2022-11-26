@@ -535,7 +535,12 @@ Function Export-PuTTYSessionToJson {
 
             $SessionFile = '{0}.json' -f $SessionName
             $SessionPath = Join-Path -Path $SessionDir.FullName -ChildPath $SessionFile
-            $CurrentSession.Settings | ConvertTo-Json -Depth 10 -ErrorAction Stop | Out-File -LiteralPath $SessionPath @OutFileParams
+            $SessionJson = $CurrentSession.Settings | ConvertTo-Json -Depth 10 -ErrorAction Stop
+
+            # Save the file using UTF-8 with no BOM. We can't use Out-File with
+            # -Encoding as there's no "utf8NoBOM" option under PowerShell 5.x.
+            $UTF8EncodingNoBom = [Text.UTF8Encoding]::new($false)
+            [IO.File]::WriteAllLines($SessionPath, $SessionJson, $UTF8EncodingNoBom)
         }
     }
 
