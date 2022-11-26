@@ -241,7 +241,33 @@ Function Initialize-PuTTYCfg {
 
     Write-Debug -Message 'Loading configuration data ...'
     $Path = Join-Path -Path $PSScriptRoot -ChildPath 'PSPuTTYCfg.jsonc'
-    $Content = Get-Content -LiteralPath $Path -Raw -ErrorAction Stop
+
+    # Remove JSON comments under PowerShell 5.x before we deserialize the
+    # configuration data, as they're not supported by the JSON parser.
+    if ($PSVersionTable.PSVersion.Major -eq 5) {
+        $ContentJsonC = Get-Content -LiteralPath $Path -ErrorAction Stop
+        $ContentJson = [Collections.Generic.List[String]]::new()
+
+        foreach ($Line in $ContentJsonC) {
+            if ($Line -match '//') {
+                $NoComment = $Line.Substring(0, $Line.IndexOf('//'))
+
+                # Skip lines which only contain a commennt
+                if ([String]::IsNullOrWhiteSpace($NoComment)) {
+                    continue
+                }
+
+                $Line = $NoComment
+            }
+
+            $ContentJson.Add($Line)
+        }
+
+        $Content = $ContentJson -Join [Environment]::NewLine
+    } else {
+        $Content = Get-Content -LiteralPath $Path -Raw -ErrorAction Stop
+    }
+
     $Data = $Content | ConvertFrom-Json -ErrorAction Stop
     Write-Debug -Message ('Loaded {0} PuTTY settings.' -f $Data.settings.Count)
 
