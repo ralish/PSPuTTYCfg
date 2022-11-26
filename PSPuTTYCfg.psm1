@@ -537,6 +537,12 @@ Function Export-PuTTYSessionToJson {
             $SessionPath = Join-Path -Path $SessionDir.FullName -ChildPath $SessionFile
             $SessionJson = $CurrentSession.Settings | ConvertTo-Json -Depth 10 -ErrorAction Stop
 
+            # Format the JSON ourselves under PowerShell 5.x as the built-in
+            # formatting by ConvertTo-Json is very broken.
+            if ($PSVersionTable.PSVersion.Major -eq 5) {
+                $SessionJson = $SessionJson | Format-Json
+            }
+
             # Save the file using UTF-8 with no BOM. We can't use Out-File with
             # -Encoding as there's no "utf8NoBOM" option under PowerShell 5.x.
             $UTF8EncodingNoBom = [Text.UTF8Encoding]::new($false)
@@ -1014,6 +1020,68 @@ Function Find-EnumName {
             return $Name
         }
     }
+}
+
+# Modified version of:
+# https://stackoverflow.com/a/56324939
+#
+# This is only necessary under PowerShell 5.x as its ConvertTo-Json cmdlet does
+# not perform correct indentation.
+Function Format-Json {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [String[]]$InputObject,
+
+        [ValidateRange(1, 8)]
+        [Int]$IndentSize = 2
+    )
+
+    Begin {
+        $Indent = [String]::Empty
+        $IndentLevel = 0
+
+        $RegexNotQuoted = '(?=([^"]*"[^"]*")*[^"]*$)'
+        $RegexIncreaseIndent = "[\{\[]$RegexNotQuoted"
+        $RegexDecreaseIndent = "[}\]]$RegexNotQuoted"
+        $RegexColonSpace = ":\s+$RegexNotQuoted"
+
+        $FormattedJson = [Collections.Generic.List[String]]::new()
+    }
+
+    Process {
+        foreach ($Line in ($InputObject -split '\r?\n')) {
+            # If the line contains a ] or } character, decrement the
+            # indentation level unless the character is inside quotes.
+            if ($Line -match $RegexDecreaseIndent) {
+                --$IndentLevel
+
+                if ($IndentLevel -lt 0) {
+                    Write-Warning -Message 'Encountered negative indentation level.'
+                    $IndentLevel = 0
+                }
+
+                $Indent = ' ' * $IndentLevel * $IndentSize
+            }
+
+            # Replace all colon-space combinations unless they are quoted
+            $Line = $Indent + ($Line.TrimStart() -replace $RegexColonSpace, ': ')
+
+            # If the line contains a [ or { character, increment the
+            # indentation level unless the character is inside quotes.
+            if ($Line -match $RegexIncreaseIndent) {
+                ++$IndentLevel
+                $Indent = ' ' * $IndentLevel * $IndentSize
+            }
+
+            $FormattedJson.Add($Line)
+        }
+    }
+
+    End {
+        return $FormattedJson -Join [Environment]::NewLine
+    }
+
 }
 
 #endregion
