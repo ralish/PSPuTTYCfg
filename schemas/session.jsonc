@@ -191,7 +191,10 @@
                         "http",
                         "socks4",
                         "socks5",
-                        "telnet"
+                        "telnet",
+                        "sshPortForward",
+                        "sshExecCommand",
+                        "sshRunSubsystem"
                     ],
                     "default": "None"
                 },

@@ -139,7 +139,10 @@
                 "socks5": 2,
                 "http": 3,
                 "telnet": 4,
-                "local": 5
+                "local": 5,
+                "sshPortForward": 6,
+                "sshExecCommand": 7,
+                "sshRunSubsystem": 8
             },
             "json": {
                 "name": "type",
