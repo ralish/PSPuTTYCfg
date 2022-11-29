@@ -87,9 +87,9 @@ Let's walk through an example to best illustrate how this works:
 
 1. Within PuTTY create a saved session with your preferred defaults. We'll assume this session is named "*Defaults*".
 2. Import the saved session while excluding settings which match PuTTY's defaults:  
-   `$Session = Import-PuTTYSession -Registry -ExcludeDefault -Filter 'Defaults'`
+   `$Sessions = Import-PuTTYSession -Registry -ExcludeDefault -Filter 'Defaults'`
 3. Export the session to a JSON configuration file:  
-   `$Session | Export-PuTTYSession -Path $HOME`
+   `$Sessions | Export-PuTTYSession -Path $HOME`
 
 At this point you should have a `Defaults.json` file in your home directory containing the session configuration excluding default settings.
 
@@ -113,11 +113,11 @@ Now create a session configuration which inherits from this configuration and se
 Finally, import this JSON configuration and export it to the Windows registry so PuTTY can use it:
 
 1. Import the JSON sessions located in our home directory:  
-   `$Session = Import-PuTTYSession -Path $HOME`
+   `$Sessions = Import-PuTTYSession -Path $HOME`
 2. Optionally inspect its settings and inheritance hierarchy:  
-   `$Session | ? Name -eq 'MySession'`
+   `$Sessions | ? Name -eq 'MySession'`
 3. Export the session to the Windows registry for PuTTY:  
-   `$Session | ? Name -eq 'MySession' | Export-PuTTYSession -Registry`
+   `$Sessions | ? Name -eq 'MySession' | Export-PuTTYSession -Registry`
 
 Open PuTTY to see your new configuration which will be using the same settings as the *Defaults* configuration (minus those we've overridden).
 
