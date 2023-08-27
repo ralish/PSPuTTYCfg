@@ -893,6 +893,23 @@
                 "on": 2
             },
             "json": {
+                "name": "oldRsaSha2CertAlgNaming",
+                "path": "/connection/ssh/bugs",
+                "type": "string"
+            },
+            "reg": {
+                "name": "BugRSASHA2CertUserauth",
+                "type": "DWord",
+                "default": 0
+            }
+        },
+        {
+            "enum": {
+                "auto": 0,
+                "off": 1,
+                "on": 2
+            },
+            "json": {
                 "name": "rsaSignaturePaddingV2",
                 "path": "/connection/ssh/bugs",
                 "type": "string"
@@ -1805,7 +1822,8 @@
                 "xtermr6": 2,
                 "vt400": 3,
                 "vt100+": 4,
-                "sco": 5
+                "sco": 5,
+                "xterm216+": 6
             },
             "json": {
                 "name": "functionKeysAndKeypadMode",

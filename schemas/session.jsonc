@@ -553,6 +553,11 @@
                     "$ref": "#/definitions/TypeAutoOnOff",
                     "title": "Only supports pre-RFC4419 SSH-2 DH GEX"
                 },
+                "oldRsaSha2CertAlgNaming": {
+                    "$comment": "BugRSASHA2CertUserauth",
+                    "$ref": "#/definitions/TypeAutoOnOff",
+                    "title": "Old RSA/SHA2 cert algorithm naming"
+                },
                 "pkAuthSessionIdMisuseV2": {
                     "$comment": "BugPKSessID2",
                     "$ref": "#/definitions/TypeAutoOnOff",
@@ -1225,7 +1230,8 @@
                         "xtermr6",
                         "vt400",
                         "vt100+",
-                        "sco"
+                        "sco",
+                        "xterm216+"
                     ],
                     "default": "esc[n~"
                 },
