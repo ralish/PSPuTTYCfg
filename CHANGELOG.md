@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.2.13
+-------
+
+- Add support for PuTTY v0.80 and use as default version
+
 v0.2.12
 -------
 

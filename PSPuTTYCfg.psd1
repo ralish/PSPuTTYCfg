@@ -8,7 +8,7 @@
     RootModule = 'PSPuTTYCfg.psm1'
 
     # Version number of this module.
-    ModuleVersion = '0.2.12'
+    ModuleVersion = '0.2.13'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
