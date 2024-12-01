@@ -1782,6 +1782,18 @@
                 "default": 0
             }
         },
+        {
+            "json": {
+                "name": "noBracketedPasteMode",
+                "path": "/terminal/features",
+                "type": "boolean"
+            },
+            "reg": {
+                "name": "DisableBracketedPaste",
+                "type": "DWord",
+                "default": 0
+            }
+        },
         // Terminal -> Keyboard
         {
             "enum": {

@@ -1138,6 +1138,12 @@
                     "type": "boolean",
                     "default": false
                 },
+                "noBracketedPasteMode": {
+                    "$comment": "DisableBracketedPaste",
+                    "title": "Disable bracketed paste mode",
+                    "type": "boolean",
+                    "default": false
+                },
                 "noRemoteCharsetConfig": {
                     "$comment": "NoRemoteCharset",
                     "title": "Disable remote-controlled character set configuration",
