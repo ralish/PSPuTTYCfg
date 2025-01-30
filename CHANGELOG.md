@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.2.16
+-------
+
+- `Import-PUTTYSession`: Fix import from registry when only a single session is present
+
 v0.2.15
 -------
 
