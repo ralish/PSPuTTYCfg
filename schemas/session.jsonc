@@ -616,6 +616,8 @@
                             "dh-group17-sha512",
                             "dh-group18-sha512",
                             "ecdh",
+                            "mlkem-curve25519",
+                            "mlkem-nist",
                             "ntru-curve25519",
                             "rsa",
                             "WARN"
