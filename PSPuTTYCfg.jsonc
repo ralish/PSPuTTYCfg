@@ -1,4 +1,5 @@
 {
+    "$schema": "https://raw.githubusercontent.com/ralish/PSPuTTYCfg/main/schemas/module.jsonc",
     "settings": [
         // Connection
         {
