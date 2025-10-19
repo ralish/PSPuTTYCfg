@@ -48,7 +48,8 @@
                         "array",
                         "boolean",
                         "integer",
-                        "string"
+                        "string",
+                        "string-expand"
                     ]
                 }
             },

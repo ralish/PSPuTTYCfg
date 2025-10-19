@@ -564,7 +564,7 @@
             "json": {
                 "name": "authKeyFile",
                 "path": "/connection/ssh/auth",
-                "type": "string"
+                "type": "string-expand"
             },
             "reg": {
                 "name": "PublicKeyFile",
@@ -576,7 +576,7 @@
             "json": {
                 "name": "authCertFile",
                 "path": "/connection/ssh/auth",
-                "type": "string"
+                "type": "string-expand"
             },
             "reg": {
                 "name": "DetachedCertificate",
@@ -649,7 +649,7 @@
             "json": {
                 "name": "gssapiCustomLib",
                 "path": "/connection/ssh/auth",
-                "type": "string"
+                "type": "string-expand"
             },
             "reg": {
                 "name": "GSSCustom",
@@ -1135,7 +1135,7 @@
             "json": {
                 "name": "x11AuthFile",
                 "path": "/connection/ssh/x11",
-                "type": "string"
+                "type": "string-expand"
             },
             "reg": {
                 "name": "X11AuthFile",
@@ -1332,7 +1332,7 @@
             "json": {
                 "name": "path",
                 "path": "/logging",
-                "type": "string"
+                "type": "string-expand"
             },
             "reg": {
                 "name": "LogFileName",
@@ -1560,7 +1560,7 @@
             "json": {
                 "name": "customAction",
                 "path": "/terminal/bell",
-                "type": "string"
+                "type": "string-expand"
             },
             "reg": {
                 "name": "BellWaveFile",

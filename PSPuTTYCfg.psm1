@@ -311,8 +311,9 @@ Function Add-PuTTYSetting {
     $Settings = $Session.Settings
     $SettingName = $SettingData.json.name
     $SettingPath = $SettingData.json.path
-    $CurrentPath = [String]::Empty
+    $SettingType = $SettingData.json.type
 
+    $CurrentPath = [String]::Empty
     foreach ($PathElement in $SettingPath.TrimStart('/').Split('/')) {
         $CurrentPath = '{0}/{1}' -f $CurrentPath, $PathElement
 
@@ -327,6 +328,10 @@ Function Add-PuTTYSetting {
         }
 
         $Settings = $Settings.$PathElement
+    }
+
+    if ($SettingType -eq 'string-expand') {
+        $Value = [Environment]::ExpandEnvironmentVariables($Value).Replace('\', '/')
     }
 
     $Settings | Add-Member -NotePropertyName $SettingName -NotePropertyValue $Value -Force:$Force
@@ -734,15 +739,15 @@ Function Convert-PuTTYSettingRegistryToDotNet {
         }
 
         'String' {
-            switch ($JsonSettingType) {
-                'array' {
+            switch -Regex ($JsonSettingType) {
+                '^array$' {
                     if ($RegSettingValue -ne [String]::Empty) {
                         return , $RegSettingValue.Split(',')
                     }
                     return , @()
                 }
 
-                'string' {
+                '^string(-expand)?$' {
                     if (!$SettingIsEnumType) { return $RegSettingValue }
 
                     $EnumName = Find-EnumName -Enum $SettingData.enum -Value $RegSettingValue
