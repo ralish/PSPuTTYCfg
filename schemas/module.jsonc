@@ -84,6 +84,13 @@
         }
     },
     "properties": {
+        "$schema": {
+            "type": "string",
+            "format": "uri"
+        },
+        "$comment": {
+            "type": "string"
+        },
         "settings": {
             "type": "array",
             "items": {
