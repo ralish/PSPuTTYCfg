@@ -263,7 +263,7 @@ Function Initialize-PuTTYCfg {
             $ContentJson.Add($Line)
         }
 
-        $Content = $ContentJson -Join [Environment]::NewLine
+        $Content = $ContentJson -join [Environment]::NewLine
     } else {
         $Content = Get-Content -LiteralPath $Path -Raw -ErrorAction Stop
     }
@@ -578,7 +578,7 @@ Function Import-PuTTYSessionFromJson {
     }
 
     if ($SessionPath -is [IO.FileInfo]) {
-        if ($SessionPath.Extension -In $JsonValidExts) {
+        if ($SessionPath.Extension -in $JsonValidExts) {
             $JsonSessions = @($SessionPath)
         } else {
             throw 'Provided path is not a JSON file: {0}' -f $Path
@@ -1084,7 +1084,7 @@ Function Format-Json {
     }
 
     End {
-        return $FormattedJson -Join [Environment]::NewLine
+        return $FormattedJson -join [Environment]::NewLine
     }
 
 }
