@@ -1,6 +1,20 @@
 Changelog
 =========
 
+v0.2.18
+-------
+
+- `Import-PuTTYSession`: Settings which take a path now expand environment variables  
+  Applies to the following settings:
+  - `/connection/ssh/auth/authKeyFile`
+  - `/connection/ssh/auth/authCertFile`
+  - `/connection/ssh/auth/gssapiCustomLib`
+  - `/connection/ssh/x11/x11AuthFile`
+  - `/logging/path`
+  - `/terminal/bell/customAction`
+
+  Using this feature currently breaks round-trip exports to JSON as the environment variables will be expanded in the exported session (i.e. the exported file will differ from the imported file).
+
 v0.2.17
 -------
 
@@ -9,7 +23,7 @@ v0.2.17
 v0.2.16
 -------
 
-- `Import-PUTTYSession`: Fix import from registry when only a single session is present
+- `Import-PuTTYSession`: Fix import from registry when only a single session is present
 
 v0.2.15
 -------
